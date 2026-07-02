@@ -109,7 +109,6 @@ public class AboutExceptions {
         try {
             doUncheckedStuff();
         } catch (RuntimeException e) {
-            System.out.println("Runtime exception:" + " " + e);
             s = "caught exception";
         }
         assertEquals(s, "caught exception");
