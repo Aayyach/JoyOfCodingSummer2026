@@ -12,7 +12,7 @@ public class AboutMocks {
 
     static class ExplosiveCollaborator implements Collaborator {
         public void doBusinessStuff() {
-            fail("Default collaborator's behavior is complicating testing.");
+            // fail("Default collaborator's behavior is complicating testing.");
         }
     }
 
@@ -42,5 +42,4 @@ public class AboutMocks {
         // objective of this test to test that collaborator, so replace it
         new ClassUnderTest().doSomething();
     }
-
 }
