@@ -133,7 +133,14 @@ public class Project1 {
         try {
           Boolean printOptionExists = false;
           Boolean readMeOptionExists = false;
-          if (args[0].equalsIgnoreCase("-README") || args[1].equalsIgnoreCase("-README")) { printREADMEFile(); readMeOptionExists = true; return; }
+          if (args[0].equalsIgnoreCase("-README") ||  args[1].equalsIgnoreCase("-README")) { readMeOptionExists = true; }
+          if (args[0].equalsIgnoreCase("-print") || args[1].equalsIgnoreCase("-print")) { printOptionExists = true; }
+
+          if (printOptionExists == false || readMeOptionExists == false) {
+            System.err.println("Valid options are -README and -print."); 
+          }
+
+          if (readMeOptionExists) { printREADMEFile(); readMeOptionExists = true; return; }
 
           Airline airline = new Airline(args[2]);
           isValidDateAndTime(args[5] + " " + args[6]);
@@ -141,11 +148,7 @@ public class Project1 {
           Flight flight = new Flight(Integer.parseInt(args[3]), args[4], args[5], args[6], args[7], args[8], args[9]);
           airline.addFlight(flight);
 
-          if (args[0].equalsIgnoreCase("-print") || args[1].equalsIgnoreCase("-print")) { System.out.println(flight.toString()); printOptionExists = true; }
-          if (printOptionExists.equals(false) && readMeOptionExists.equals(false)) {
-            System.err.println(args[0] + " and" + args[1] + " are not recognized as valid options.");
-            System.err.println("Valid options are -README and -print."); 
-          }
+          if (printOptionExists) { System.out.println(flight.toString()); printOptionExists = true; }
         }
         catch (NumberFormatException e) {
           System.err.println("The flight number can only be numerical digits. Please try running the program again with the appropriate input for the flight number.");
