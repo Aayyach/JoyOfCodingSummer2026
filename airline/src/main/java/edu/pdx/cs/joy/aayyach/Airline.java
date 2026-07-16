@@ -14,6 +14,14 @@ public class Airline extends AbstractAirline<Flight> {
   private final Collection<Flight> flights;
 
   /**
+   * Default constructor that initializes the fields of this airline to their default equivalent.
+   */
+  public Airline() {
+    this.name = "";
+    this.flights = null;
+  }
+
+  /**
    * Initializes the fields of this airline.
    * 
    * @param name  the name of the airline

@@ -2,6 +2,13 @@ package edu.pdx.cs.joy.aayyach;
 
 import edu.pdx.cs.joy.AbstractFlight;
 
+/**
+ * This class represents an airline flight, which extends the AbstractFlight class.  Each flight has a unique
+ * number identifying it, an origin airport identified by the
+ * airport's three-letter code, a departure time, a destination
+ * airport identified by the airport's three-letter code, and an
+ * arrival time.
+ */
 public class Flight extends AbstractFlight {
   private final String source;
   private final String sourceDate; 
@@ -12,17 +19,31 @@ public class Flight extends AbstractFlight {
   private final int number;  
 
   /**
+   * Default constructor that initializes the fields of this flight to their default equivalent.
+   */
+
+  public Flight() {
+    this.source = "";
+    this.sourceDate = "";
+    this.sourceTime = "";
+    this.dest = "";
+    this.destDate = "";
+    this.destTime = "";
+    this.number = 0;
+  }
+
+  /**
    * Initalizes the fields of this airline.
    * 
+   * @param number  the flight number
    * @param source  the name of the departing airport
    * @param sourceDate  the date of the departing flight
    * @param sourceTime  the time of the departing flight
    * @param dest  the name of the arrival airport
    * @param destDate  the date of the arrival
    * @param destTime  the time of the arrival
-   * @param number  the flight number
    */
-  public Flight(String source, String sourceDate, String sourceTime, String dest, String destDate, String destTime, int number) {
+  public Flight(int number, String source, String sourceDate, String sourceTime, String dest, String destDate, String destTime) {
     // Uses methods to check for valid input from parameters 
     checkSourceOrDest(source);
     checkSourceOrDest(dest);
@@ -31,13 +52,13 @@ public class Flight extends AbstractFlight {
     checkTime(sourceTime);
     checkTime(destTime);
 
+    this.number = number; 
     this.source = source; 
     this.sourceDate = sourceDate;
     this.sourceTime = sourceTime; 
     this.dest = dest;
     this.destDate = destDate;
     this.destTime = destTime; 
-    this.number = number; 
   }
 
   /**
@@ -70,8 +91,8 @@ public class Flight extends AbstractFlight {
    * @return  Boolean value (true) if the date is valid
    */
   public Boolean checkDate(String date) {
-    if (date.length() < 9) {
-      throw new IllegalArgumentException(); 
+    if (date.length() < 8) {
+      throw new IllegalArgumentException("Date must be in the format \"mm/dd/yyyy\" or \"m/d/yyyy\" with only numerical characters for mm, dd, and yyyy. Please try running the program again with a date in the specified formats."); 
     }
     // Checks if the string is in the correct format with regex
     else if (!date.matches("^[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}$")) {
@@ -116,7 +137,7 @@ public class Flight extends AbstractFlight {
   }
 
   /**
-   * Returns the departure time of this flight (Ignored in Project 1).
+   * Returns the departure date and time of this flight.
    */
   @Override
   public String getDepartureString() {
@@ -132,7 +153,7 @@ public class Flight extends AbstractFlight {
   }
 
   /**
-   * Returns the arrival time of this flight (Ignored in Project 1).
+   * Returns the arrival date and time of this flight.
    */
   @Override
   public String getArrivalString() {

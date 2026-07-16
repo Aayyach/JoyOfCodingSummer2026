@@ -19,12 +19,12 @@ class Project1IT extends InvokeMainTestCase {
     }
 
   /**
-   * Tests that invoking the main method with no arguments issues an error
+   * Tests that invoking the main method with no arguments prints helpful description message.
    */
   @Test
   void testNoCommandLineArguments() {
     MainMethodResult result = invokeMain();
-    assertThat(result.getTextWrittenToStandardError(), containsString("Missing airline information"));
+    assertThat(result.getTextWrittenToStandardOut(), containsString("usage: java -jar target/airline-1.0.0.jar [options] <args>"));
   }
 
 }

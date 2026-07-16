@@ -11,6 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class AirlineTest {
 
 /**
+ * This unit test checks to make sure that the default constructor of Airline works as expected.
+ */
+@Test 
+void checkDefaultConstructorOfAirline() {
+   Airline test = new Airline();
+   assertEquals(test.getName(), "");
+   assertEquals(test.getFlights(), null);
+}
+
+/**
  * This unit test checks that the checkName method throws an exception for empty input in the name field.
  */
 @Test 
@@ -45,7 +55,7 @@ void checkNameWithValidInputReturnsTrue() {
  void getFlightsReturnsFlightsCollectionAfterAddingFlight() {
     Airline test = new Airline("Test");
 
-    Flight testFlight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight testFlight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     test.addFlight(testFlight);
     assertEquals(test.getFlights().toArray()[0], testFlight);
  }

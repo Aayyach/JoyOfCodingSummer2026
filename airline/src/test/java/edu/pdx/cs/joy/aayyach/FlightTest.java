@@ -12,12 +12,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 public class FlightTest {
 
+/**
+ * This unit test checks to make sure that the default constructor of Flight works as expected.
+ */
+@Test 
+void checkDefaultConstructorOfFlight() {
+   Flight flight = new Flight();
+   assertEquals(flight.getSource(), "");
+   assertEquals(flight.getDepartureString(), " ");
+   assertEquals(flight.getDestination(), "");
+   assertEquals(flight.getArrivalString(), " ");
+   assertEquals(flight.getNumber(), 0);
+}
   /**
    * This unit test checks that the getSource method returns the correct String (source).
    */
   @Test 
   void getSourceStringReturnsCorrectSource() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertEquals(flight.getSource(), "PDX"); 
   }
 
@@ -26,7 +38,7 @@ public class FlightTest {
    */
   @Test
   void getNumberReturnsCorrectNumber() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertThat(flight.getNumber(), equalTo(123)); 
   }
 
@@ -35,7 +47,7 @@ public class FlightTest {
    */
   @Test
   void getDestinationReturnsCorrectDestString() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertEquals(flight.getDestination(), "OAK");
   }
 
@@ -44,7 +56,7 @@ public class FlightTest {
    */
   @Test 
   void getDepatureStringReturnsCorrectDateAndTimeString() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertEquals(flight.getDepartureString(), "07/14/2026 20:00");
   }
 
@@ -53,7 +65,7 @@ public class FlightTest {
    */
   @Test
   void getArrivalStringReturnsCorrectDateAndTimeString() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertEquals(flight.getArrivalString(), "07/14/2026 22:00");
   }
 
@@ -62,7 +74,7 @@ public class FlightTest {
    */
   @Test
   void checkSourceorDestWithEmptyInputThrowsException() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertThrows(IllegalArgumentException.class, () -> flight.checkSourceOrDest("")); 
   }
 
@@ -71,7 +83,7 @@ public class FlightTest {
    */
   @Test
   void checkSourceorDestWithNoAlphabeticalCharsThrowsException() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertThrows(IllegalArgumentException.class, () -> flight.checkSourceOrDest("123")); 
   }
 
@@ -80,7 +92,7 @@ public class FlightTest {
    */
   @Test
   void checkSourceorDestWithLettersAndNumbersThrowsException() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertThrows(IllegalArgumentException.class, () -> flight.checkSourceOrDest("1AA")); 
   }
 
@@ -89,7 +101,7 @@ public class FlightTest {
    */
   @Test
   void checkSourceorDestWithValidCharactersReturnsTrue() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertEquals(flight.checkSourceOrDest("PDX"), true); 
   }
 
@@ -98,7 +110,7 @@ public class FlightTest {
    */
   @Test
   void checkDateWithInvalidDateFormatThrowsException() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertThrows(IllegalArgumentException.class, () -> flight.checkDate("123456789")); 
   }
 
@@ -107,7 +119,7 @@ public class FlightTest {
    */
   @Test
   void checkDateWithInvalidInputThrowsException() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertThrows(IllegalArgumentException.class, () -> flight.checkDate("TestTestTest")); 
   }
 
@@ -116,7 +128,7 @@ public class FlightTest {
    */
   @Test 
   void checkDateWithValidDateReturnsTrue() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertEquals(flight.checkDate("7/14/2026"), true); 
   }
 
@@ -125,7 +137,7 @@ public class FlightTest {
    */
   @Test
   void checkTimeWithEmptyInputThrowsException() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertThrows(IllegalArgumentException.class, () -> flight.checkTime(" ")); 
   }
 
@@ -134,7 +146,7 @@ public class FlightTest {
    */
   @Test
   void checkTimeWithInvalidInputThrowsException() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertThrows(IllegalArgumentException.class, () -> flight.checkTime("TestTest")); 
   }
 
@@ -143,7 +155,7 @@ public class FlightTest {
    */
   @Test
   void checkTimeWithInvalidTimeFormatThrowsException() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertThrows(IllegalArgumentException.class, () -> flight.checkTime("2000")); 
   }
 
@@ -152,7 +164,7 @@ public class FlightTest {
    */
   @Test
   void checkTimeWithValidInputReturnsTrue() {
-    Flight flight = new Flight("PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00", 123);
+    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
     assertEquals(flight.checkTime("20:00"), true); 
   }
   
