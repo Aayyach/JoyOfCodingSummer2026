@@ -215,7 +215,7 @@ public class Project2 {
       }
     }
     // Checks if there are no options in the command line
-    else if (len >= 8 && len <= 12) {
+    else if (len > 8) {
       // Checks if any arguments start with "-"
       boolean noOptions = true;
       for (String elem : arg) {
