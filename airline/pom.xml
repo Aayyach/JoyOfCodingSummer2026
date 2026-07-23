@@ -16,9 +16,9 @@
   <url>http://www.cs.pdx.edu/~whitlock</url>
   <developers>
     <developer>
-      <id>YOU</id>
-      <name>Your name here</name>
-      <email>you@youremail.com</email>
+      <id>Aayyach</id>
+      <name>Alaa Ayyach</name>
+      <email>aayyach@pdx.edu</email>
       <url>http://www.cs.pdx.edu/~YOU</url>
       <organization>PSU Department of Computer Science</organization>
       <organizationUrl>http://www.cs.pdx.edu</organizationUrl>
@@ -59,7 +59,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>edu.pdx.cs.joy.aayyach.Project1</mainClass>
+              <mainClass>edu.pdx.cs.joy.aayyach.Project2</mainClass>
             </manifest>
           </archive>
         </configuration>

@@ -2,20 +2,24 @@ package edu.pdx.cs.joy.aayyach;
 
 import edu.pdx.cs.joy.InvokeMainTestCase;
 import org.junit.jupiter.api.Test;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * An integration test for the {@link Project1} main class.
+ * An integration test for the {@link Project2} main class.
  */
-class Project1IT extends InvokeMainTestCase {
+class Project2IT extends InvokeMainTestCase {
 
     /**
-     * Invokes the main method of {@link Project1} with the given arguments.
+     * Invokes the main method of {@link Project2} with the given arguments.
      */
     private MainMethodResult invokeMain(String... args) {
-        return invokeMain( Project1.class, args );
+        return invokeMain( Project2.class, args );
     }
 
   /**
@@ -49,7 +53,7 @@ class Project1IT extends InvokeMainTestCase {
    * Tests that invoking the main method with only the 8 required arguments doesn't produce any text to STDOUT/STDERR
    */
   @Test
-  void testOnlyCommandLineArgsPresentDoesNothingExceptCreateNewObjects() {
+  void testOnlyCommandLineArgsPresentDoesNothing() {
     MainMethodResult result = invokeMain("Airline", "123", "PDX", "07/15/2026",  "20:00", "OAK", "07/15/2026", "22:00");
     assertThat(result.getTextWrittenToStandardOut(), containsString(""));
   }
@@ -73,12 +77,33 @@ class Project1IT extends InvokeMainTestCase {
   }
 
   /**
+   * Tests that invoking the main method with the -textFile file option creates a new file
+   */
+  @Test
+  void testTextFileOptionsMakesNewFile() {
+    invokeMain("-textFile", "test.txt", "Airline", "123", "PDX", "07/15/2026",  "20:00", "OAK", "07/15/2026", "22:00");
+    Path path = Paths.get("test.txt"); 
+    assertThat(Files.exists(path), equalTo(true));
+  }
+
+  /**
+   * Tests that invoking the main method with the -textFile file option creates a new file and -print prints the flight info
+   */
+  @Test
+  void testTextFileOptionsMakesNewFileAndPrintOptionPrintsFlightInfo() {
+    MainMethodResult result = invokeMain("-textFile", "test.txt", "-print", "Airline", "123", "PDX", "07/15/2026",  "20:00", "OAK", "07/15/2026", "22:00");
+    Path path = Paths.get("test.txt"); 
+    assertThat(Files.exists(path), equalTo(true));
+    assertThat(result.getTextWrittenToStandardOut(), containsString("Flight 123 departs PDX"));
+  }
+
+  /**
    * Tests that invoking the main method with an invalid option prints a helpful error message
    */
   @Test
   void testBogusOptionPrintsGracefulExitMessage() {
     MainMethodResult result = invokeMain("-bogus", "Airline", "123", "PDX", "07/15/2026",  "20:00", "OAK", "07/15/2026", "22:00");
-    assertThat(result.getTextWrittenToStandardError(), containsString("Valid options are -README and -print."));
+    assertThat(result.getTextWrittenToStandardError(), containsString("Error: -bogus is not recognized as a valid option"));
   }
 
   /**
@@ -86,7 +111,7 @@ class Project1IT extends InvokeMainTestCase {
    */
   @Test
   void testIfAllOptionsAndCommandLineArgsAreEnteredProgramPrintsReadMeAndExits() {
-    MainMethodResult result = invokeMain("-README", "-print", "Airline", "123", "PDX", "07/15/2026",  "20:00", "OAK", "07/15/2026", "22:00");
+    MainMethodResult result = invokeMain("-README", "-print", "-textFile test.txt", "Airline", "123", "PDX", "07/15/2026",  "20:00", "OAK", "07/15/2026", "22:00");
     assertThat(result.getTextWrittenToStandardOut(), containsString("Developer: "));
   }
 
@@ -95,17 +120,17 @@ class Project1IT extends InvokeMainTestCase {
    */
   @Test
   void testBogusOptionsAndAllCommandLineArgsAreEnteredProgramExitsWithError() {
-    MainMethodResult result = invokeMain("-bogus", "-bogus", "Airline", "123", "PDX", "07/15/2026",  "20:00", "OAK", "07/15/2026", "22:00");
-    assertThat(result.getTextWrittenToStandardError(), containsString("Valid options are -README and -print."));
+    MainMethodResult result = invokeMain("-bogus", "-bogus", "-bogus text", "Airline", "123", "PDX", "07/15/2026",  "20:00", "OAK", "07/15/2026", "22:00");
+    assertThat(result.getTextWrittenToStandardError(), containsString("Error: -bogus is not recognized as a valid option"));
   }
 
   /**
    * Tests that invoking the main method with all valid arguments, one valid option, and one invalid option prints a helpful error message
    */
   @Test
-  void testOneBogusOptionAndAllCommandLineArgsAreEnteredProgramExitsWithError() {
+  void testOneBogusOptionAndOneCommandLineArgsAreEnteredProgramExitsWithError() {
     MainMethodResult result = invokeMain("-README", "-bogus", "Airline", "123", "PDX", "07/15/2026",  "20:00", "OAK", "07/15/2026", "22:00");
-    assertThat(result.getTextWrittenToStandardError(), containsString("Valid options are -README and -print."));
+    assertThat(result.getTextWrittenToStandardError(), containsString("Error: -bogus is not recognized as a valid option"));
   }
 
   /**
