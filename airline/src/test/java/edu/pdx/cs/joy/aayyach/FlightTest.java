@@ -2,10 +2,12 @@ package edu.pdx.cs.joy.aayyach;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 /**
  * Unit tests for the {@link Flight} class.
@@ -17,19 +19,22 @@ public class FlightTest {
  */
 @Test 
 void checkDefaultConstructorOfFlight() {
-   Flight flight = new Flight();
-   assertEquals(flight.getSource(), "");
-   assertEquals(flight.getDepartureString(), " ");
-   assertEquals(flight.getDestination(), "");
-   assertEquals(flight.getArrivalString(), " ");
-   assertEquals(flight.getNumber(), 0);
+    Flight flight = new Flight();
+    assertEquals(flight.getSource(), "");
+    assertEquals(flight.getDeparture(), null);
+    assertEquals(flight.getDestination(), "");
+    assertEquals(flight.getArrival(), null);
+    assertEquals(flight.getNumber(), 0);
 }
   /**
    * This unit test checks that the getSource method returns the correct String (source).
    */
   @Test 
   void getSourceStringReturnsCorrectSource() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
+    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+
+    Flight flight = new Flight(123, "PDX", source, "OAK", dest);
     assertEquals(flight.getSource(), "PDX"); 
   }
 
@@ -38,7 +43,10 @@ void checkDefaultConstructorOfFlight() {
    */
   @Test
   void getNumberReturnsCorrectNumber() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
+    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+
+    Flight flight = new Flight(123, "PDX", source, "OAK", dest);
     assertThat(flight.getNumber(), equalTo(123)); 
   }
 
@@ -47,7 +55,10 @@ void checkDefaultConstructorOfFlight() {
    */
   @Test
   void getDestinationReturnsCorrectDestString() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
+    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+
+    Flight flight = new Flight(123, "PDX", source, "OAK", dest);
     assertEquals(flight.getDestination(), "OAK");
   }
 
@@ -56,8 +67,11 @@ void checkDefaultConstructorOfFlight() {
    */
   @Test 
   void getDepatureStringReturnsCorrectDateAndTimeString() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
-    assertEquals(flight.getDepartureString(), "07/14/2026 20:00");
+    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+
+    Flight flight = new Flight(123, "PDX", source, "OAK", dest);
+    assertEquals(flight.getDepartureString(), "7/29/26, 8:00 AM");
   }
 
   /**
@@ -65,8 +79,11 @@ void checkDefaultConstructorOfFlight() {
    */
   @Test
   void getArrivalStringReturnsCorrectDateAndTimeString() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
-    assertEquals(flight.getArrivalString(), "07/14/2026 22:00");
+    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+
+    Flight flight = new Flight(123, "PDX", source, "OAK", dest);
+    assertEquals(flight.getArrivalString(), "7/29/26, 10:00 AM");
   }
 
   /**
@@ -74,7 +91,10 @@ void checkDefaultConstructorOfFlight() {
    */
   @Test
   void checkSourceorDestWithEmptyInputThrowsException() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
+    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+
+    Flight flight = new Flight(123, "PDX", source, "OAK", dest);
     assertThrows(IllegalArgumentException.class, () -> flight.checkSourceOrDest("")); 
   }
 
@@ -83,7 +103,10 @@ void checkDefaultConstructorOfFlight() {
    */
   @Test
   void checkSourceorDestWithNoAlphabeticalCharsThrowsException() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
+    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+
+    Flight flight = new Flight(123, "PDX", source, "OAK", dest);
     assertThrows(IllegalArgumentException.class, () -> flight.checkSourceOrDest("123")); 
   }
 
@@ -92,7 +115,10 @@ void checkDefaultConstructorOfFlight() {
    */
   @Test
   void checkSourceorDestWithLettersAndNumbersThrowsException() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
+    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+
+    Flight flight = new Flight(123, "PDX", source, "OAK", dest);
     assertThrows(IllegalArgumentException.class, () -> flight.checkSourceOrDest("1AA")); 
   }
 
@@ -101,71 +127,77 @@ void checkDefaultConstructorOfFlight() {
    */
   @Test
   void checkSourceorDestWithValidCharactersReturnsTrue() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
+    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+
+    Flight flight = new Flight(123, "PDX", source, "OAK", dest);
     assertEquals(flight.checkSourceOrDest("PDX"), true); 
   }
 
   /**
-   * This unit test is to validate that the checkDate method throws an exception if the input length is valid, but the format is incorrect.
+   * This unit test is to validate that compareTo returns -1 if current object goes before other object
    */
   @Test
-  void checkDateWithInvalidDateFormatThrowsException() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
-    assertThrows(IllegalArgumentException.class, () -> flight.checkDate("123456789")); 
+  void compareToReturnsNegativeNumIfCurrentObjectComesBeforeOtherObject() {
+    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+
+    Flight flight1 = new Flight(123, "PDX", source, "OAK", dest);
+    Flight flight2 = new Flight(123, "XXX", source, "OAK", dest);
+    assertEquals(flight1.compareTo(flight2), -1);
   }
 
   /**
-   * This unit test is to validate that the checkDate method throws an exception if the input length is valid, but the format is incorrect (alphabetical). 
+   * This unit test is to validate that compareTo returns 1 if current object goes after other object
    */
   @Test
-  void checkDateWithInvalidInputThrowsException() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
-    assertThrows(IllegalArgumentException.class, () -> flight.checkDate("TestTestTest")); 
+  void compareToReturnsPositiveNumIfCurrentObjectComesBeforeOtherObject() {
+    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+
+    Flight flight1 = new Flight(123, "XXX", source, "OAK", dest);
+    Flight flight2 = new Flight(123, "PDX", source, "OAK", dest);
+    assertEquals(flight1.compareTo(flight2), 1);
   }
 
   /**
-   * This unit test is to validate that the checkDate method returns true with a valid date.
-   */
-  @Test 
-  void checkDateWithValidDateReturnsTrue() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
-    assertEquals(flight.checkDate("7/14/2026"), true); 
-  }
-
-  /**
-   * This unit test is to validate that the checkTime method throws an exception with empty input.
+   * This unit test is to validate that compareTo returns 0 if current object equals other object
    */
   @Test
-  void checkTimeWithEmptyInputThrowsException() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
-    assertThrows(IllegalArgumentException.class, () -> flight.checkTime(" ")); 
-  }
+  void compareToReturnsPositiveNumIfCurrentObjectEqualsOtherObject() {
+    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
 
-  /**
-   * This unit test is to valdiate that the checkTime method throws an exception with invalid input (alphabetical).
-   */
-  @Test
-  void checkTimeWithInvalidInputThrowsException() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
-    assertThrows(IllegalArgumentException.class, () -> flight.checkTime("TestTest")); 
-  }
-
-  /**
-   * This unit test is to validate that the checkTime method throws an exception with invalid input (digits but not correctly formatted).
-   */
-  @Test
-  void checkTimeWithInvalidTimeFormatThrowsException() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
-    assertThrows(IllegalArgumentException.class, () -> flight.checkTime("2000")); 
-  }
-
-  /**
-   * This unit test is to validate that the checkTime method returns true if the input is valid.
-   */
-  @Test
-  void checkTimeWithValidInputReturnsTrue() {
-    Flight flight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
-    assertEquals(flight.checkTime("20:00"), true); 
+    Flight flight1 = new Flight(123, "PDX", source, "OAK", dest);
+    Flight flight2 = new Flight(123, "PDX", source, "OAK", dest);
+    assertEquals(flight1.compareTo(flight2), 0);
   }
   
+  /**
+   * This unit test is to validate that compareTo returns -2 if current object equals other object but their departure time is different
+   */
+  @Test
+  void compareToReturnsNegativeNumIfCurrentObjectDepartureTimeComesBeforeOtherObject() {
+    LocalDateTime source1 = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime source2 = LocalDateTime.of(2026, 7, 29, 9, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+    
+    Flight flight1 = new Flight(123, "PDX", source1, "OAK", dest);
+    Flight flight2 = new Flight(123, "PDX", source2, "OAK", dest);
+    assertEquals(flight1.compareTo(flight2), -2);
+  }
+
+  /**
+   * This unit test is to validate that compareTo returns -2 if current object equals other object but their departure time is different
+   */
+  @Test
+  void compareToReturnsNegativeNumIfCurrentObjectDepartureTimeComesAfterOtherObject() {
+    LocalDateTime source1 = LocalDateTime.of(2026, 7, 29, 8, 0);
+    LocalDateTime source2 = LocalDateTime.of(2026, 7, 29, 7, 0);
+    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
+    
+    Flight flight1 = new Flight(123, "PDX", source1, "OAK", dest);
+    Flight flight2 = new Flight(123, "PDX", source2, "OAK", dest);
+    assertEquals(flight1.compareTo(flight2), 3);
+  }
 }

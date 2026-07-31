@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDateTime;
+
 /**
  * Unit tests for the {@link Airline} class.
  */
@@ -54,8 +56,10 @@ void checkNameWithValidInputReturnsTrue() {
  @Test 
  void getFlightsReturnsFlightsCollectionAfterAddingFlight() {
     Airline test = new Airline("Test");
+   LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
+   LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
 
-    Flight testFlight = new Flight(123, "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00");
+    Flight testFlight = new Flight(123, "PDX", source, "OAK", dest);
     test.addFlight(testFlight);
     assertEquals(test.getFlights().toArray()[0], testFlight);
  }

@@ -3,6 +3,7 @@ package edu.pdx.cs.joy.aayyach;
 import edu.pdx.cs.joy.AbstractAirline;
 
 import java.util.Collection;
+import java.util.Collections; 
 import java.util.ArrayList; 
 
 /**
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  */
 public class Airline extends AbstractAirline<Flight> {
   private final String name;
-  private final Collection<Flight> flights;
+  private Collection<Flight> flights;
 
   /**
    * Default constructor that initializes the fields of this airline to their default equivalent.
@@ -59,7 +60,7 @@ public class Airline extends AbstractAirline<Flight> {
    */
   @Override
   public void addFlight(Flight flight) {
-    flights.add(flight); 
+    flights.add(flight);
   }
 
   /**
@@ -67,6 +68,13 @@ public class Airline extends AbstractAirline<Flight> {
    */
   @Override
   public Collection<Flight> getFlights() {
+    if (flights == null)
+      return null;
+    
+    ArrayList<Flight> temp = new ArrayList<>(flights);
+    Collections.sort(temp);
+    flights = temp; 
     return this.flights;
   }
+
 }

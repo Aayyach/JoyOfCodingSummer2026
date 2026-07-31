@@ -6,8 +6,10 @@ import java.nio.file.Files;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.BufferedReader;
+import edu.pdx.cs.joy.AirportNames;
 import java.time.LocalDateTime;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -18,7 +20,7 @@ import edu.pdx.cs.joy.ParserException;
 /**
  * The main class for the Airline Project 
  */
-public class Project2 {
+public class Project3 {
 
   /**
    * Parses the command line and allows user to run the program
@@ -33,6 +35,26 @@ public class Project2 {
     }
     // Returns the extracted airline and flight details
     String [] info = getAirlineAndFlight(args, options); 
+    try {
+      LocalDateTime dept = isValidDateAndTime(info[3] + " " + info[4] + " " + info[5]);
+      LocalDateTime arr = isValidDateAndTime(info[7] + " " + info[8] + " " + info[9]);
+      if (arr.isBefore(dept)) {
+        System.err.println("Arrival time cannot be before departure time.");
+        return;
+      }
+
+      if (AirportNames.getName(info[2]) == null) {
+        System.err.println("The departure airport does not exist.");
+        return;
+      }
+      else if (AirportNames.getName(info[6]) == null) {
+        System.err.println("The arrival airport does not exist.");
+        return;
+      }
+    } catch (Exception e) {
+      System.err.println("The departure and/or arrival date is invalid or airport code is invalid.");
+    } 
+
     boolean readMeOptionExists = false;
 
     // Checks if -README option exists
@@ -45,24 +67,28 @@ public class Project2 {
     Airline airline = null;
     Flight flight = null;
 
-    for (int h = 0; options[h] != null; h++) {
+    for (int h = 0; options[h] != null && h < options.length ; h++) {
       // Prints README file and exits program
       if (readMeOptionExists) {
         printREADMEFile();
         return; 
       }
+
       // Creates airline and flight objects and prints airline and flight info
       if (options[h].equals("-print")) {
         try {
           airline = new Airline(info[0]);
-          if (isValidDateAndTime(info[3] + " " + info[4]) && isValidDateAndTime(info[6] + " " + info[7])) {
-            flight = new Flight(Integer.parseInt(info[1]), info[2], info[3], info[4], info[5], info[6], info[7]);
+          LocalDateTime departure = isValidDateAndTime(info[3] + " " + info[4] + " " + info[5]);
+          LocalDateTime arrival = isValidDateAndTime(info[7] + " " + info[8] + " " + info[9]);
+          if (departure != null && arrival != null) {
+            flight = new Flight(Integer.parseInt(info[1]), info[2], departure, info[6], arrival);
             System.out.println(flight.toString());
           }
         } catch (NumberFormatException e) {
           System.err.println("The flight number can only be numerical digits. Please try running the program again with the appropriate input for the flight number.");
         }
       }
+
       // Text file logic
       if (options[h].equals("-textFile")) {
         TextDumper dumper;
@@ -76,13 +102,15 @@ public class Project2 {
             parser = new TextParser(Files.newBufferedReader(path)); 
             airline = parser.parse(); 
             dumper = new TextDumper(Files.newBufferedWriter(path));
+            LocalDateTime departure = isValidDateAndTime(info[3] + " " + info[4]+ " " + info[5]);
+            LocalDateTime arrival = isValidDateAndTime(info[7] + " " + info[8] + " " + info[9]);
             if (!airline.getName().equals(info[0])) {
               System.err.println("Given airline name doesn't match the airline name in the existing file: " + path);
               dumper.dump(airline);
               return;
             }
             else {
-              flight = new Flight(Integer.parseInt(info[1]), info[2], info[3], info[4], info[5], info[6], info[7]); 
+              flight = new Flight(Integer.parseInt(info[1]), info[2], departure, info[6], arrival);
               airline.addFlight(flight);
               dumper.dump(airline);
             }
@@ -100,7 +128,9 @@ public class Project2 {
           try {
             if (parentPath != null) { Files.createDirectories(parentPath); }
             airline = new Airline(info[0]);
-            flight = new Flight(Integer.parseInt(info[1]), info[2], info[3], info[4], info[5], info[6], info[7]); 
+            LocalDateTime departure = isValidDateAndTime(info[3] + " " + info[4]+ " " + info[5]);
+            LocalDateTime arrival = isValidDateAndTime(info[7] + " " + info[8] + " " + info[9]);
+            flight = new Flight(Integer.parseInt(info[1]), info[2], departure, info[6], arrival);
             airline.addFlight(flight);
             dumper = new TextDumper(Files.newBufferedWriter(path));
             dumper.dump(airline);
@@ -109,6 +139,30 @@ public class Project2 {
           } catch (Exception e) {
             System.err.println(e.getMessage());
           }
+        }
+      }
+
+      if (options[h].equals("-pretty")) {
+        PrettyPrinter dumper;
+        Path path;
+
+        // Initialize the path
+        if (options[h + 1].equals("-")) { path = null; }
+        else { path = Paths.get(options[h + 1]); }
+
+        try {
+          // Initalize the pretty printer
+          if (path == null) { dumper = new PrettyPrinter(new OutputStreamWriter(System.out)); }
+          else { dumper = new PrettyPrinter(Files.newBufferedWriter(path)); }
+
+          airline = new Airline(info[0]);
+          LocalDateTime departure = isValidDateAndTime(info[3] + " " + info[4]+ " " + info[5]);
+          LocalDateTime arrival = isValidDateAndTime(info[7] + " " + info[8] + " " + info[9]);
+          flight = new Flight(Integer.parseInt(info[1]), info[2], departure, info[6], arrival);
+          airline.addFlight(flight);
+          dumper.dump(airline);
+        } catch (Exception e) {
+          System.out.println("Something went wrong...");
         }
       }
     } 
@@ -121,12 +175,12 @@ public class Project2 {
    * @return  String array with the airline and flight information
    */
   public static String [] getAirlineAndFlight(String[] arg, String[] options) {
-    String [] info = new String[8]; 
+    String [] info = new String[10]; 
     if (options == null) { return null; }
     else if (!(options == null) && options[0].equals("Not enough") || options[0].equals("Too many")) { return null; }
     
     int size = arg.length;
-    if (arg.length == 8) {
+    if (arg.length == 10) {
       for (int i = 0; i < size; ++i) { 
         info[i] = arg[i]; 
       }
@@ -138,6 +192,11 @@ public class Project2 {
     int j = 0;  // for info index
     while (i < arg.length) {
       if (arg[i].equals("-textFile")) {
+        // Skip over filename
+        i += 2;
+        continue;
+      }
+      if (arg[i].equals("-pretty")) {
         // Skip over filename
         i += 2;
         continue;
@@ -162,7 +221,7 @@ public class Project2 {
    * @return  String array with the command line arguments
    */
   public static String[] getOptions(String[] arg) {
-    String [] args = new String[4]; 
+    String [] args = new String[6]; 
     int len = arg.length;
     // No command line arguments 
     if (len == 0) {
@@ -170,24 +229,30 @@ public class Project2 {
       return args; 
     }
     // Not enough command line arguments
-    else if (len < 8) {
+    else if (len < 10) {
       args[0] = "Not enough";
-      System.err.println("Error: Not enough command line arguments\nThis program has 8 required args that must be entered when running the program. Refer below to see how to run the program correctly.");
+      System.err.println("Error: Not enough command line arguments\nThis program has 10 required args that must be entered when running the program. Refer below to see how to run the program correctly.");
       printHelpfulDesc();
       return args;
     }
     // Too many command line arguments
-    else if (len > 12) {
+    else if (len > 16) {
       args[0] = "Too many";
-      System.err.println("Error: Too many command line arguments\nThis program has 8 required args and 3 optional options that must be entered when running the program. Refer below to see how to run the program correctly.");
+      System.err.println("Error: Too many command line arguments\nThis program has 10 required args and 4 optional options that must be entered when running the program. Refer below to see how to run the program correctly.");
       printHelpfulDesc();
       return args;
     }
     // Get the command line arguments
-    else if (arg[0].startsWith("-") || arg[1].startsWith("-") || arg[2].startsWith("-") || arg[3].startsWith("-")){
+    else if (arg[0].startsWith("-") || arg[1].startsWith("-") || arg[2].startsWith("-") || arg[3].startsWith("-") || arg[4].startsWith("-") || arg[5].startsWith("-")){
       int size = len;
       int index = 0;
-      while (index < size && arg[index].startsWith("-")) {
+      while (index < size) {
+        // Skips the filenames
+        if (!arg[index].startsWith("-")) {
+          ++index;
+          continue;
+        }
+
         switch (arg[index]) {
           case "-README":
             args[index] = arg[index]; 
@@ -199,7 +264,17 @@ public class Project2 {
             continue;
           case "-textFile":
             if (index + 1 >= arg.length) {
-              System.out.println("Error: -textFile option missing filename. Please try again.");
+              System.err.println("Error: -textFile option missing filename. Please try again.");
+              args[0] = null;
+              return args; 
+            }
+            args[index] = arg[index]; 
+            args[index + 1] = arg[index + 1]; 
+            index += 2;
+            continue;
+          case "-pretty":
+              if (index + 1 >= arg.length) {
+              System.err.println("Error: -pretty option missing filename. Please try again.");
               args[0] = null;
               return args; 
             }
@@ -215,7 +290,7 @@ public class Project2 {
       }
     }
     // Checks if there are no options in the command line
-    else if (len > 8) {
+    else if (len > 10) {
       // Checks if any arguments start with "-"
       boolean noOptions = true;
       for (String elem : arg) {
@@ -239,14 +314,13 @@ public class Project2 {
    * @return  boolean value to confirm date and time are valid or not
    */
   @VisibleForTesting
-  static boolean isValidDateAndTime(String dateAndTime) {
+  static LocalDateTime isValidDateAndTime(String dateAndTime) {
     try {
-      LocalDateTime.parse(dateAndTime, DateTimeFormatter.ofPattern("M/d/yyyy H:mm")); 
-      return true;
+      return LocalDateTime.parse(dateAndTime, DateTimeFormatter.ofPattern("M/d/yyyy h:mm a")); 
     }
     catch (DateTimeParseException e) {
       System.err.println("Invalid date entered for departing or arriving flight."); 
-      return false;
+      return null;
     }
   }
 
@@ -257,7 +331,8 @@ public class Project2 {
     System.out.println("usage: java -jar target/airline-1.0.0.jar [options] <args>");
     System.out.println("args are (in this order):\nairline\t\t\tThe name of the airline\nflightNumber\t\tThe flight number\nsrc\t\t\tThree-letter code of departure airport");
     System.out.println("depart\t\t\tDeparture date and time (24-hour time)\ndest\t\t\tThree-letter code of arrival airport\narrive\t\t\tArrival date and time (24-hour time).");
-    System.out.println("options are (options may appear in any order):\n-print\t\t\tPrints a description of the new flight\n-README\t\t\tPrints a README for this project and exits");
+    System.out.println("options are (options may appear in any order):\n-pretty file\t\t\tPretty print the airline's flights to a text file or stand out (file -)\n-textFile file"
+                        + "\t\t\tWhere to read/write the airline info\n-print\t\t\tPrints a description of the new flight\n-README\t\t\tPrints a README for this project and exits");
     System.out.println("Date and time should be in the format: mm/dd/yyyy hh:mm");
   }
 
@@ -265,7 +340,7 @@ public class Project2 {
    * Prints the README.txt file
    */
   public static void printREADMEFile() {
-    try(InputStream readme = Project2.class.getResourceAsStream("README.txt")) {
+    try(InputStream readme = Project3.class.getResourceAsStream("README.txt")) {
       BufferedReader reader = new BufferedReader(new InputStreamReader(readme));
         String line = reader.readLine();
       while (line != null) {

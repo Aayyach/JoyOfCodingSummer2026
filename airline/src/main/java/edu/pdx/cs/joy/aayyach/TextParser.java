@@ -6,6 +6,8 @@ import edu.pdx.cs.joy.ParserException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Implementation of the <code>TextParser</code> class for Project 2.
@@ -31,7 +33,6 @@ public class TextParser implements AirlineParser<Airline> {
   @Override
   public Airline parse() throws ParserException {
     try (BufferedReader br = new BufferedReader(this.reader)) {
-
       Airline airline = null;
       String airlineName = br.readLine();
       String line = "";
@@ -39,12 +40,11 @@ public class TextParser implements AirlineParser<Airline> {
       if (airlineName == null) {
         throw new ParserException("Airline name is missing in the text file");
       }
-      
       else {
         airline = new Airline(airlineName); 
         while ((line = br.readLine()) != null) {
           String [] flightInfo = line.split(","); 
-          if (flightInfo.length != 5) {
+          if (flightInfo.length != 9) {
             throw new ParserException("Text file is not formatted correctly (CSV)"); 
           }
 
@@ -55,21 +55,18 @@ public class TextParser implements AirlineParser<Airline> {
             throw new ParserException("Text file is not formatted correctly (Flight number is not numerical)");
           }
           String src = flightInfo[1];
-          String srcDateTime = flightInfo[2];
-          String dest = flightInfo[3];
-          String destDateTime = flightInfo[4];
+          String srcDateTime = flightInfo[2] + " " + flightInfo[3] + " " + flightInfo[4];
+          String dest = flightInfo[5];
+          String destDateTime = flightInfo[6] + " " + flightInfo[7] + " " + flightInfo[8];
 
-          String[] srcDateTimeArr = srcDateTime.split(" "); 
-          String[] destDateTimeArr = destDateTime.split(" "); 
-          String srcDate = srcDateTimeArr[0];
-          String srcTime = srcDateTimeArr[1];
-          String destDate = destDateTimeArr[0];
-          String destTime = destDateTimeArr[1];
-          Flight flight = new Flight(num, src, srcDate, srcTime, dest, destDate, destTime); 
+          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a");
+          LocalDateTime source = LocalDateTime.parse(srcDateTime, formatter);
+          LocalDateTime destination = LocalDateTime.parse(destDateTime, formatter);
+
+          Flight flight = new Flight(num, src, source, dest, destination); 
           airline.addFlight(flight);
         }
       }
-
       return airline;
     } catch (IOException e) {
       throw new ParserException("While parsing airline text", e);

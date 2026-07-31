@@ -59,7 +59,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>edu.pdx.cs.joy.aayyach.Project2</mainClass>
+              <mainClass>edu.pdx.cs.joy.aayyach.Project3</mainClass>
             </manifest>
           </archive>
         </configuration>

@@ -12,7 +12,9 @@ public class AirlineXmlHelper extends ProjectXmlHelper {
   protected static final String PUBLIC_ID =
     "-//Joy of Coding at PSU//DTD Airline//EN";
 
-
+/**
+ * Implements error handling for the Airline XML dtd
+ */
   public AirlineXmlHelper() {
     super(PUBLIC_ID, "airline.dtd");
   }

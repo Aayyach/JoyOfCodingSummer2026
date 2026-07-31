@@ -3,6 +3,7 @@ package edu.pdx.cs.joy.aayyach;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
+import java.time.LocalDateTime;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,11 +15,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * A unit test for code in the <code>Project2</code> class.  This is different
- * from <code>Project2IT</code> which is an integration test (and can capture data
+ * A unit test for code in the <code>Project3</code> class.  This is different
+ * from <code>Project3IT</code> which is an integration test (and can capture data
  * written to {@link System#out} and the like.
  */
-class Project2Test {
+class Project3Test {
 
   /**
    * This unit test verifies that the README.txt file can be read as a resource.
@@ -28,7 +29,7 @@ class Project2Test {
   @Test
   void readmeCanBeReadAsResource() throws IOException {
     try (
-      InputStream readme = Project2.class.getResourceAsStream("README.txt")
+      InputStream readme = Project3.class.getResourceAsStream("README.txt")
     ) {
       assertThat(readme, not(nullValue()));
       BufferedReader reader = new BufferedReader(new InputStreamReader(readme));
@@ -41,18 +42,19 @@ class Project2Test {
    * This unit test checks that the isValidDateAndTime method throws the DateTimeParseException and returns false with an invalid date.
    */
   @Test
-  void isValidDateAndTimeWithInvalidDateThrowsExceptionAndReturnsFalse() {
-    Project2 test = new Project2();
-    assertThat(test.isValidDateAndTime("11/11/1111"), equalTo(false));
+  void isValidDateAndTimeWithInvalidDateThrowsExceptionAndReturnsNull() {
+    Project3 test = new Project3();
+    assertThat(test.isValidDateAndTime("11/11/1111 3:00\u202FAM"), equalTo(null));
   }
 
   /**
    * This unit test checks that the isValidDateAndTime method returns true with a valid date. 
    */
   @Test 
-  void isValidDateAndTimeWithValidDateReturnsTrue() {
-    Project2 test = new Project2();
-    assertThat(test.isValidDateAndTime("7/16/2026 2:00"), equalTo(true));
+  void isValidDateAndTimeWithValidDateReturnsLocalDateTimeObject() {
+    Project3 test = new Project3();
+    LocalDateTime dt = LocalDateTime.of(2026, 7, 16, 2, 0);
+    assertThat(test.isValidDateAndTime("7/16/2026 2:00 AM"), equalTo(dt));
   }
 
   /**
@@ -60,8 +62,8 @@ class Project2Test {
    */
   @Test
   void getOptionsMethodReturnsAllValidArgumentsThatStartWithAHyphen() {
-    Project2 test = new Project2();
-    String [] elem = {"-README", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"};
+    Project3 test = new Project3();
+    String [] elem = {"-README", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10","t11"};
     String [] returned = test.getOptions(elem);
     assertThat(returned[0], equalTo("-README"));
   }
@@ -71,8 +73,8 @@ class Project2Test {
    */
   @Test
   void getOptionsMethodReturnsNullForInvalidArgumentsThatStartWithAHyphen() {
-    Project2 test = new Project2();
-    String [] elem = {"-test1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"};
+    Project3 test = new Project3();
+    String [] elem = {"-test1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10","t11"};
     String [] returned = test.getOptions(elem);
     assertThat(returned[0], equalTo(null));
   }
@@ -82,8 +84,8 @@ class Project2Test {
    */
   @Test
   void getOptionsMethodOutputsTooManyForCommandLineWithTooManyArgs() {
-    Project2 test = new Project2();
-    String [] elem = {"-README", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12", "t13"};
+    Project3 test = new Project3();
+    String [] elem = {"-print", "-textFile", "file.txt", "-pretty", "file2.txt", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12", "t13", "t14", "t15"};
     String [] returned = test.getOptions(elem);
     assertThat(returned[0], equalTo("Too many"));
   }
@@ -93,7 +95,7 @@ class Project2Test {
    */
   @Test
   void getOptionsMethodOutputsNotEnoughForCommandLineWithTooLittleArgs() {
-    Project2 test = new Project2();
+    Project3 test = new Project3();
     String [] elem = {"-README", "t2", "t3", "t4"};
     String [] returned = test.getOptions(elem);
     assertThat(returned[0], equalTo("Not enough"));
@@ -104,8 +106,8 @@ class Project2Test {
    */
   @Test
   void getOptionsMethodWithNoOptionsReturnsNull() {
-    Project2 test = new Project2();
-    String [] elem = {"t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"};
+    Project3 test = new Project3();
+    String [] elem = {"t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10"};
     String [] returned = test.getOptions(elem);
     assertThat(returned[0], equalTo(null));
   }
@@ -115,7 +117,7 @@ class Project2Test {
    */
   @Test
   void getAirlineAndFlightWithNullOptionReturnsNull() {
-    Project2 test = new Project2();
+    Project3 test = new Project3();
     String [] args = {"123", "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00"};
     assertEquals(test.getAirlineAndFlight(args, null), null);
   }
@@ -125,9 +127,9 @@ class Project2Test {
    */
   @Test
   void getAirlineAndFlightWithValidOptionsReturnsArgs() {
-    Project2 test = new Project2();
+    Project3 test = new Project3();
     String [] elem = {"-README"};
-    String [] args = {"Airline", "123", "PDX", "07/14/2026", "20:00", "OAK", "07/14/2026", "22:00"};
+    String [] args = {"Airline", "123", "PDX", "07/14/2026", "20:00", "PM", "OAK", "07/14/2026", "22:00", "PM"};
     String [] result = test.getAirlineAndFlight(args, elem);
     assertEquals(Arrays.equals(args, result), true);
   }
