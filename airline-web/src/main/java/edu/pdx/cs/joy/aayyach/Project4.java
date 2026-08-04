@@ -18,8 +18,8 @@ public class Project4 {
     public static void main(String... args) {
         String hostName = null;
         String portString = null;
-        String word = null;
-        String definition = null;
+        String airlineName = null;
+        String flightNumber = null;
 
         for (String arg : args) {
             if (hostName == null) {
@@ -28,11 +28,11 @@ public class Project4 {
             } else if ( portString == null) {
                 portString = arg;
 
-            } else if (word == null) {
-                word = arg;
+            } else if (airlineName == null) {
+                airlineName = arg;
 
-            } else if (definition == null) {
-                definition = arg;
+            } else if (flightNumber == null) {
+                flightNumber = arg;
 
             } else {
                 usage("Extraneous command line argument: " + arg);
@@ -45,6 +45,9 @@ public class Project4 {
 
         } else if ( portString == null) {
             usage( "Missing port" );
+            return;
+        } else if ( airlineName == null ) {
+            usage( "Missing airline name" );
             return;
         }
 
@@ -61,22 +64,23 @@ public class Project4 {
 
         String message;
         try {
-            if (word == null) {
-                // Print all word/definition pairs
+            if (airlineName == null) {
+                // Print all airlineName/flightNumber pairs
                 Map<String, String> dictionary = client.getAllDictionaryEntries();
                 StringWriter sw = new StringWriter();
                 PrettyPrinter pretty = new PrettyPrinter(sw);
                 pretty.dump(dictionary);
                 message = sw.toString();
 
-            } else if (definition == null) {
+            } else if (flightNumber == null) {
                 // Print all dictionary entries
-                message = PrettyPrinter.formatDictionaryEntry(word, client.getDefinition(word));
+                // getAirline needs to be changed to getFlightNumber
+                message = PrettyPrinter.formatDictionaryEntry(airlineName, client.getAirline(airlineName));
 
             } else {
-                // Post the word/definition pair
-                client.addDictionaryEntry(word, definition);
-                message = Messages.definedWordAs(word, definition);
+                // Post the airlineName/flightNumber pair
+                client.addFlight(airlineName, flightNumber);
+                message = Messages.definedAirlineNameAs(airlineName, flightNumber);
             }
 
         } catch (IOException | ParserException ex ) {
@@ -102,17 +106,17 @@ public class Project4 {
         PrintStream err = System.err;
         err.println("** " + message);
         err.println();
-        err.println("usage: java Project4 host port [word] [definition]");
+        err.println("usage: java Project4 host port [airlineName] [flightNumber]");
         err.println("  host         Host of web server");
         err.println("  port         Port of web server");
-        err.println("  word         Word in dictionary");
-        err.println("  definition   Definition of word");
+        err.println("  airlineName         airlineName in dictionary");
+        err.println("  flightNumber   flightNumber of airlineName");
         err.println();
-        err.println("This simple program posts words and their definitions");
+        err.println("This simple program posts airlineNames and their flightNumbers");
         err.println("to the server.");
-        err.println("If no definition is specified, then the word's definition");
+        err.println("If no flightNumber is specified, then the airlineName's flightNumber");
         err.println("is printed.");
-        err.println("If no word is specified, all dictionary entries are printed");
+        err.println("If no airlineName is specified, all dictionary entries are printed");
         err.println();
     }
 }

@@ -21,23 +21,6 @@ import static org.mockito.Mockito.*;
 class AirlineServletTest {
 
   @Test
-  void initiallyServletContainsNoDictionaryEntries() throws IOException {
-    AirlineServlet servlet = new AirlineServlet();
-
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    HttpServletResponse response = mock(HttpServletResponse.class);
-    PrintWriter pw = mock(PrintWriter.class);
-
-    when(response.getWriter()).thenReturn(pw);
-
-    servlet.doGet(request, response);
-
-    // Nothing is written to the response's PrintWriter
-    verify(pw, never()).println(anyString());
-    verify(response).setStatus(HttpServletResponse.SC_OK);
-  }
-
-  @Test
   void addOneWordToDictionary() throws IOException {
     AirlineServlet servlet = new AirlineServlet();
 
@@ -45,8 +28,8 @@ class AirlineServletTest {
     String definition = "TEST DEFINITION";
 
     HttpServletRequest request = mock(HttpServletRequest.class);
-    when(request.getParameter(AirlineServlet.WORD_PARAMETER)).thenReturn(word);
-    when(request.getParameter(AirlineServlet.DEFINITION_PARAMETER)).thenReturn(definition);
+    when(request.getParameter(AirlineServlet.AIRLINE_NAME_PARAMETER)).thenReturn(word);
+    when(request.getParameter(AirlineServlet.FLIGHT_NUMBER_PARAMETER)).thenReturn(definition);
 
     HttpServletResponse response = mock(HttpServletResponse.class);
 
@@ -58,7 +41,7 @@ class AirlineServletTest {
 
     servlet.doPost(request, response);
 
-    assertThat(stringWriter.toString(), containsString(Messages.definedWordAs(word, definition)));
+    assertThat(stringWriter.toString(), containsString(Messages.definedAirlineNameAs(word, definition)));
 
     // Use an ArgumentCaptor when you want to make multiple assertions against the value passed to the mock
     ArgumentCaptor<Integer> statusCode = ArgumentCaptor.forClass(Integer.class);
@@ -66,7 +49,27 @@ class AirlineServletTest {
 
     assertThat(statusCode.getValue(), equalTo(HttpServletResponse.SC_OK));
 
-    assertThat(servlet.getDefinition(word), equalTo(definition));
+    assertThat(servlet.getAirline(word), equalTo(definition));
+  }
+
+  @Test
+  void missingAirlineNameParameterReturnsPreconditionFailedStatusCode() throws IOException {
+    AirlineServlet servlet = new AirlineServlet();
+
+    HttpServletRequest request = mock(HttpServletRequest.class);
+    when(request.getParameter(AirlineServlet.AIRLINE_NAME_PARAMETER)).thenReturn(null);
+
+    HttpServletResponse response = mock(HttpServletResponse.class);
+    PrintWriter pw = mock(PrintWriter.class);
+
+    when(response.getWriter()).thenReturn(pw);
+
+    servlet.doGet(request, response);
+
+    // Nothing is written to the response's PrintWriter
+    String message = Messages.missingRequiredParameter(AirlineServlet.AIRLINE_NAME_PARAMETER);
+    verify(response).sendError(HttpServletResponse.SC_PRECONDITION_FAILED, message);
+
   }
 
 }
