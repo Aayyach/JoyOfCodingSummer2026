@@ -7,12 +7,15 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 
 /**
  * A unit test for the REST client that demonstrates using mocks and
@@ -25,7 +28,15 @@ public class AirlineRestClientTest {
     String airlineName = "Airline";
     Airline airline = new Airline(airlineName);
     int flightNumber = 123;
-    airline.addFlight(new Flight(flightNumber));
+    String src = "PDX";
+    String srcDateTime = "08/05/2026 10:00 PM";
+    String dest = "OAK";
+    String destDateTime = "08/06/2026 12:00 AM";
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a");
+    LocalDateTime source = LocalDateTime.parse(srcDateTime, formatter);
+    LocalDateTime destination = LocalDateTime.parse(destDateTime, formatter);
+    airline.addFlight(new Flight(flightNumber, src, source, dest, destination));
 
     HttpRequestHelper http = mock(HttpRequestHelper.class);
     when(http.get(eq(Map.of(AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName)))).thenReturn(airlineAsText(airline));

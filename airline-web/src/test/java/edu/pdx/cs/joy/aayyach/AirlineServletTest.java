@@ -26,10 +26,18 @@ class AirlineServletTest {
 
     String airlineName = "AIRLINE";
     String flightNumber = "123";
+    String src = "PDX";
+    String srcDateTime = "8/05/2026 10:00 PM";
+    String dest = "OAK";
+    String destDateTime = "8/06/2026 12:00 AM";
 
     HttpServletRequest request = mock(HttpServletRequest.class);
     when(request.getParameter(AirlineServlet.AIRLINE_NAME_PARAMETER)).thenReturn(airlineName);
     when(request.getParameter(AirlineServlet.FLIGHT_NUMBER_PARAMETER)).thenReturn(flightNumber);
+    when(request.getParameter(AirlineServlet.SRC_AIRPORT_PARAMETER)).thenReturn(src);
+    when(request.getParameter(AirlineServlet.DEPART_TIME_PARAMETER)).thenReturn(srcDateTime);
+    when(request.getParameter(AirlineServlet.DEST_AIRPORT_PARAMETER)).thenReturn(dest);
+    when(request.getParameter(AirlineServlet.ARRIVAL_TIME_PARAMETER)).thenReturn(destDateTime);
 
     HttpServletResponse response = mock(HttpServletResponse.class);
 

@@ -32,17 +32,6 @@ public class Flight extends AbstractFlight implements Comparable<Flight> {
   }
 
   /**
-   * Constructor for flight number, will delete later
-   */
-  public Flight(int flightNumber) {
-    this.number = flightNumber;
-    this.source = "";
-    this.sourceDateTime = null;
-    this.dest = "";
-    this.destDateTime = null;
-  }
-
-  /**
    * Initalizes the fields of this airline.
    * 
    * @param number  the flight number

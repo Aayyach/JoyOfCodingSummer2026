@@ -21,6 +21,14 @@ public class Project4 {
         String portString = null;
         String airlineName = null;
         String flightNumber = null;
+        String src = null; 
+        String departDate = null;
+        String departTime = null;
+        String departExt = null; 
+        String dest = null; 
+        String arrivalDate = null;
+        String arrivalTime = null;
+        String arrivalExt = null; 
 
         for (String arg : args) {
             if (hostName == null) {
@@ -35,6 +43,22 @@ public class Project4 {
             } else if (flightNumber == null) {
                 flightNumber = arg;
 
+            } else if (src == null) {
+                src = arg;
+            } else if (departDate == null) {
+                departDate = arg;
+            } else if (departTime == null) {
+                departTime = arg;
+            } else if (departExt == null) {
+                departExt = arg;
+            } else if (dest == null) {
+                dest = arg;
+            } else if (arrivalDate == null) {
+                arrivalDate = arg;
+            } else if (arrivalTime == null) {
+                arrivalTime = arg;
+            } else if (arrivalExt == null) {
+                arrivalExt = arg;
             } else {
                 usage("Extraneous command line argument: " + arg);
             }
@@ -50,6 +74,20 @@ public class Project4 {
         } else if ( airlineName == null ) {
             usage( "Missing airline name" );
             return;
+        } else if ( src == null ) {
+            usage( "Missing src airport" );
+            return;
+        } else if ( departDate == null ) {
+            usage( "Missing depart date" );
+            return;
+        } else if ( departTime == null ) {
+            usage( "Missing depart time" );
+            return;
+        } else if ( departExt == null ) {
+            usage( "Missing depart extension (AM/PM) ");
+        } else if ( dest == null ) {
+            usage( " Missing destination airport" );
+            return;
         }
 
         int port;
@@ -64,6 +102,8 @@ public class Project4 {
         AirlineRestClient client = new AirlineRestClient(hostName, port);
 
         String message;
+        String depart = departDate + " " + departTime + " " + departExt;
+        String arrive = arrivalDate + " " + arrivalTime + " " + arrivalExt;
         try {
             if (flightNumber == null) {
                 // Print all dictionary entries
@@ -76,7 +116,7 @@ public class Project4 {
 
             } else {
                 // Post the airlineName/flightNumber pair
-                client.addFlight(airlineName, flightNumber);
+                client.addFlight(airlineName, flightNumber, src, depart, dest, arrive);
                 message = Messages.definedAirlineNameAs(airlineName, flightNumber);
             }
 

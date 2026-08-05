@@ -39,7 +39,12 @@ class AirlineRestClientIT {
     AirlineRestClient client = newAirlineRestClient();
     String airlineName = "AIRLINE";
     String flightNumber = "123";
-    client.addFlight(airlineName, flightNumber);
+    String src = "PDX";
+    String srcDateTime = "8/05/2026 10:00 PM";
+    String dest = "OAK";
+    String destDateTime = "8/06/2026 12:00 AM";
+
+    client.addFlight(airlineName, flightNumber, src, srcDateTime, dest, destDateTime);
 
     Airline airline = client.getAirline(airlineName);
     assertThat(airline.getName(), equalTo(airlineName));

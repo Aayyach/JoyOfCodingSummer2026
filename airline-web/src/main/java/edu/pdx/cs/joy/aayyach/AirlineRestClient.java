@@ -6,6 +6,7 @@ import edu.pdx.cs.joy.web.HttpRequestHelper;
 import edu.pdx.cs.joy.web.HttpRequestHelper.Response;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.io.StringReader;
 import java.util.Map;
 
@@ -27,14 +28,20 @@ public class AirlineRestClient
 
     /**
      * Creates a client to the airline REST service running on the given host and port
+     * 
      * @param hostName The name of the host
      * @param port The port
      */
-    public AirlineRestClient( String hostName, int port )
+    public AirlineRestClient(String hostName, int port)
     {
         this(new HttpRequestHelper(String.format("http://%s:%d/%s/%s", hostName, port, WEB_APP, SERVLET)));
     }
 
+    /**
+     * AirlineRestClient constructor that only accepts the http parameter
+     * 
+     * @param http the http parameter
+     */
     @VisibleForTesting
     AirlineRestClient(HttpRequestHelper http) {
       this.http = http;
@@ -42,6 +49,11 @@ public class AirlineRestClient
 
   /**
    * Returns the definition for the given airlineName
+   * 
+   * @param airlineName the name of the airline
+   * @throws ParserException  throws a parser expcetion if the parser runs into an error
+   * @throws IOException  throws an IOException 
+   * @return an airline object
    */
   public Airline getAirline(String airlineName) throws IOException, ParserException {
     Response response = http.get(Map.of(AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName));
@@ -52,16 +64,51 @@ public class AirlineRestClient
     return parser.parse();
   }
 
-  public void addFlight(String airlineName, String definition) throws IOException {
-    Response response = http.post(Map.of(AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName, AirlineServlet.FLIGHT_NUMBER_PARAMETER, definition));
+  /**
+   * POST request to add a new flight to an airline
+   * 
+   * @param airlineName the name of the airline
+   * @param flightNumber the string representation of the flight number
+   * @throws IOException throws an IOException if HTTP status is not 200
+   */
+  public void addFlight(String airlineName, String flightNumber) throws IOException {
+    Response response = http.post(Map.of(AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName, AirlineServlet.FLIGHT_NUMBER_PARAMETER, flightNumber));
     throwExceptionIfNotOkayHttpStatus(response);
   }
 
+  /**
+   * POST request to add a new flight to an airline with more required arguments
+   * 
+   * @param airlineName the name of the airline
+   * @param flightNumber the string representation of the flight number
+   * @param source the source airport
+   * @param departTime the departure time
+   * @param dest the destination airport
+   * @param arrivalTime the arrival time
+   * @throws IOException throws an IOException if HTTP status is not 200
+   */
+  public void addFlight(String airlineName, String flightNumber, String source, String departTime, String dest, String arrivalTime) throws IOException {
+    Response response = http.post(Map.of(AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName, AirlineServlet.FLIGHT_NUMBER_PARAMETER, flightNumber, 
+        AirlineServlet.SRC_AIRPORT_PARAMETER, source, AirlineServlet.DEPART_TIME_PARAMETER, departTime, AirlineServlet.DEST_AIRPORT_PARAMETER, dest,
+        AirlineServlet.ARRIVAL_TIME_PARAMETER, arrivalTime));
+    throwExceptionIfNotOkayHttpStatus(response);
+  }
+
+  /**
+   * DELETE request to delete all airlines and their corresponding flights
+   * 
+   * @throws IOException throws an IOException if HTTP status is not 200
+   */
   public void removeAllAirlines() throws IOException {
     Response response = http.delete(Map.of());
     throwExceptionIfNotOkayHttpStatus(response);
   }
 
+  /**
+   * Throws an exception if HTTP status is not 200
+   * 
+   * @param response  the HTTP response
+   */
   private void throwExceptionIfNotOkayHttpStatus(Response response) {
     int code = response.getHttpStatusCode();
     if (code != HTTP_OK) {

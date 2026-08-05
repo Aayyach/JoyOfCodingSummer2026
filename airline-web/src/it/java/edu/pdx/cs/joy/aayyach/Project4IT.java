@@ -44,36 +44,39 @@ class Project4IT extends InvokeMainTestCase {
     }
 
     @Test
-    void test3NonExistentAirlineThrowsAppointmentBookRestException() {
+    void test3NonExistentSourceAirlinePrintsErrorMessage() {
         String airlineName = "AIRLINE NAME";
-        try {
-            invokeMain(Project4.class, HOSTNAME, PORT, airlineName);
-            fail("Should have thrown a RestException");
-
-        } catch (UncaughtExceptionInMain ex) {
-            RestException cause = (RestException) ex.getCause();
-            assertThat(cause.getHttpStatusCode(), equalTo(HttpURLConnection.HTTP_NOT_FOUND));
-        }
+        String flightNumber = "123";
+        MainMethodResult result = invokeMain(Project4.class, HOSTNAME, PORT, airlineName, flightNumber);
+        assertThat(result.getTextWrittenToStandardError(), containsString("** Missing source airport"));
     }
 
     @Test
     void test4AddFlight() {
         String airlineName = "AIRLINE NAME";
         String flightNumber = "123";
+        String source = "PDX";
+        String departDate = "8/5/2026";
+        String departTime = "9:00";
+        String departExt =  "PM";
+        String dest = "OAK";
+        String arriveDate = "8/5/2026";
+        String arriveTime = "11:00";
+        String arriveExt = "PM";
 
-        MainMethodResult result = invokeMain( Project4.class, HOSTNAME, PORT, airlineName, flightNumber );
+        MainMethodResult result = invokeMain( Project4.class, HOSTNAME, PORT, airlineName, flightNumber, source, departDate, departTime, departExt, dest, arriveDate, arriveTime, arriveExt );
 
         assertThat(result.getTextWrittenToStandardError(), equalTo(""));
 
         String out = result.getTextWrittenToStandardOut();
         assertThat(out, out, containsString(Messages.definedAirlineNameAs(airlineName, flightNumber)));
 
-        result = invokeMain( Project4.class, HOSTNAME, PORT, airlineName );
+        result = invokeMain( Project4.class, HOSTNAME, PORT, airlineName, flightNumber, source, departDate, departTime, departExt, dest, arriveDate, arriveTime, arriveExt );
 
         assertThat(result.getTextWrittenToStandardError(), equalTo(""));
 
         out = result.getTextWrittenToStandardOut();
         // assertThat(out, out, containsString(PrettyPrinter.formatDictionaryEntry(airlineName, flightNumber)));
-        assertThat(out, containsString("AIRLINE NAME with 1 flights"));
+        assertThat(out, containsString("Defined AIRLINE NAME as 123"));
     }
 }

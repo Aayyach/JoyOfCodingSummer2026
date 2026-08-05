@@ -3,6 +3,10 @@ package edu.pdx.cs.joy.aayyach;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Collection;
 
 public class TextDumper {
   private final Writer writer;
@@ -12,14 +16,20 @@ public class TextDumper {
   }
 
   public void dump(Airline airline) {
-    try (
-      PrintWriter pw = new PrintWriter(this.writer)
-    ){
+    Collection<Flight> airlineFlights = airline.getFlights();
+    try (PrintWriter pw = new PrintWriter(this.writer)) {
       pw.println(airline.getName());
-      airline.getFlights().forEach( flight -> {
-        pw.println(flight.getNumber()); 
-      });
 
+      for (Flight flight : airlineFlights ) {
+        DateTimeFormatter date = DateTimeFormatter.ofPattern("M/d/yyyy");
+        DateTimeFormatter time = DateTimeFormatter.ofPattern("h:mm");
+        DateTimeFormatter ext = DateTimeFormatter.ofPattern("a");
+        LocalDateTime dept = flight.getDeparture();
+        LocalDateTime arr = flight.getArrival(); 
+        pw.println(flight.getNumber() + "," + flight.getSource() + "," + dept.format(date) + 
+                   "," + dept.format(time) + "," + dept.format(ext) + "," + flight.getDestination() 
+                   + "," + arr.format(date) + "," + arr.format(time) + "," + arr.format(ext));
+      }
       pw.flush();
     }
   }

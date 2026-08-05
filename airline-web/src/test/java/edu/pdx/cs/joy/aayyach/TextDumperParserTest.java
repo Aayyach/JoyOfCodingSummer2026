@@ -7,6 +7,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -29,7 +31,15 @@ public class TextDumperParserTest {
     String airlineName = "Airline";
     Airline airline = new Airline(airlineName);
     int flightNumber = 123;
-    airline.addFlight(new Flight(flightNumber));
+    String src = "PDX";
+    String srcDateTime = "08/05/2026 10:00 PM";
+    String dest = "OAK";
+    String destDateTime = "08/06/2026 12:00 AM";
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a");
+    LocalDateTime source = LocalDateTime.parse(srcDateTime, formatter);
+    LocalDateTime destination = LocalDateTime.parse(destDateTime, formatter);
+    airline.addFlight(new Flight(flightNumber, src, source, dest, destination));
 
     Airline read = dumpAndParse(airline);
     assertThat(read.getName(), equalTo(airlineName));

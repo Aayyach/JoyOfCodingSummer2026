@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class TextParser {
   private final Reader reader;
@@ -18,22 +21,49 @@ public class TextParser {
   }
 
   public Airline parse() throws ParserException {
-    Airline airline = null;
-    try (
-      BufferedReader br = new BufferedReader(this.reader)
-    ) {
-      for (String line = br.readLine(); line != null; line = br.readLine()) {
-        if (airline == null) {
-          airline = new Airline(line);
-        } else {
-          airline.addFlight(new Flight(Integer.parseInt(line)));
+    try (BufferedReader br = new BufferedReader(this.reader)) {
+      Airline airline = null;
+      Flight flight = null; 
+      String airlineName = br.readLine();
+      String line = "";
+
+      airline = new Airline(airlineName); 
+      while ((line = br.readLine()) != null) {
+        String [] flightInfo = line.split(","); 
+        if (flightInfo.length != 9) {
+          throw new ParserException("Expected 9 arguments to be passed in to parse."); 
         }
-      }
 
+        int num = 0;
+        try {
+          num = Integer.parseInt(flightInfo[0]);
+        } catch (NumberFormatException e) {
+          throw new ParserException("Flight number is not numerical.");
+         }
+
+        String src = flightInfo[1];
+        String srcDateTime = flightInfo[2] + " " + flightInfo[3] + " " + flightInfo[4];
+        String dest = flightInfo[5];
+        String destDateTime = flightInfo[6] + " " + flightInfo[7] + " " + flightInfo[8];
+        LocalDateTime source = null;
+        LocalDateTime destination = null;
+          
+        try {
+          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm a");
+          source = LocalDateTime.parse(srcDateTime, formatter);
+          destination = LocalDateTime.parse(destDateTime, formatter);
+        } catch (DateTimeParseException e) {
+          throw new ParserException("Error while parsing date and time.");
+        }
+
+        if (source != null && destination != null) {
+          flight = new Flight(num, src, source, dest, destination); 
+          airline.addFlight(flight);
+        }
+      } 
+      return airline;
     } catch (IOException e) {
-      throw new ParserException("While parsing airline", e);
+        throw new ParserException("While parsing airline", e);
     }
-
-    return airline;
   }
 }

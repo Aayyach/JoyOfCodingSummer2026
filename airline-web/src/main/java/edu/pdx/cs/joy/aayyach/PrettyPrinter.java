@@ -37,6 +37,10 @@ public class PrettyPrinter {
       
       for (Flight flight : flights) {
         pw.printf(" Flight number: %s\n", flight.getNumber());
+        pw.printf(" Departure airport: %s\n", flight.getDeparture());
+        pw.printf(" Departure time: %s\n", flight.getDepartureString());
+        pw.printf(" Arrival airport: %s\n", flight.getArrival());
+        pw.printf(" Arrival time: %s\n", flight.getArrivalString());
       }
 
       pw.flush();
