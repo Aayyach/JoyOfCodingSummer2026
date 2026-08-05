@@ -38,11 +38,13 @@ class AirlineRestClientIT {
   void test2AddFlight() throws IOException, ParserException {
     AirlineRestClient client = newAirlineRestClient();
     String airlineName = "AIRLINE";
-    String flightNumber = "FLIGHT NUMBER";
+    String flightNumber = "123";
     client.addFlight(airlineName, flightNumber);
 
-    String airline = client.getAirline(airlineName);
-    assertThat(airline, equalTo(flightNumber));
+    Airline airline = client.getAirline(airlineName);
+    assertThat(airline.getName(), equalTo(airlineName));
+    assertThat(airline.getFlights().size(), equalTo(1));
+    assertThat(airline.getFlights().iterator().next().getNumber(), equalTo(Integer.parseInt(flightNumber)));
   }
 
   @Test

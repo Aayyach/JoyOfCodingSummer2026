@@ -5,6 +5,7 @@ import com.google.common.annotations.VisibleForTesting;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Map;
+import java.util.*;
 
 public class PrettyPrinter {
   private final Writer writer;
@@ -26,17 +27,16 @@ public class PrettyPrinter {
     this.writer = writer;
   }
 
-  public void dump(Map<String, String> dictionary) {
+  public void dump(Airline airline) {
     try (
       PrintWriter pw = new PrintWriter(this.writer)
     ) {
 
-      pw.println(formatWordCount(dictionary.size()));
-
-      for (Map.Entry<String, String> entry : dictionary.entrySet()) {
-        String word = entry.getKey();
-        String definition = entry.getValue();
-        pw.println(formatDictionaryEntry(word, definition));
+      Collection<Flight> flights = airline.getFlights();
+      pw.println(airline.getName() + " with " + flights.size() + " flights\n");
+      
+      for (Flight flight : flights) {
+        pw.printf(" Flight number: %s\n", flight.getNumber());
       }
 
       pw.flush();

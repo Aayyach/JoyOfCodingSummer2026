@@ -5,6 +5,7 @@ import edu.pdx.cs.joy.ParserException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringWriter;
+import java.io.OutputStreamWriter;
 import java.util.Map;
 
 /**
@@ -64,18 +65,14 @@ public class Project4 {
 
         String message;
         try {
-            if (airlineName == null) {
-                // Print all airlineName/flightNumber pairs
-                Map<String, String> dictionary = client.getAllDictionaryEntries();
-                StringWriter sw = new StringWriter();
-                PrettyPrinter pretty = new PrettyPrinter(sw);
-                pretty.dump(dictionary);
-                message = sw.toString();
-
-            } else if (flightNumber == null) {
+            if (flightNumber == null) {
                 // Print all dictionary entries
-                // getAirline needs to be changed to getFlightNumber
-                message = PrettyPrinter.formatDictionaryEntry(airlineName, client.getAirline(airlineName));
+                Airline airline = client.getAirline(airlineName); 
+
+                StringWriter sw = new StringWriter(); 
+                PrettyPrinter pretty = new PrettyPrinter(sw); 
+                pretty.dump(airline);
+                message = sw.toString(); 
 
             } else {
                 // Post the airlineName/flightNumber pair
