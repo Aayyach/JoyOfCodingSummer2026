@@ -47,6 +47,35 @@ public class AirlineRestClient
       this.http = http;
     }
 
+  public Airline getAirlineAndFlight(String airlineName, String src, String dest) throws IOException, ParserException {
+    if (src == null || dest == null) {
+      Response response = http.get(Map.of(AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName));
+      throwExceptionIfNotOkayHttpStatus(response);
+      String content = response.getContent();
+      TextParser parser = new TextParser(new StringReader(content));
+      return parser.parse();
+    } else if (src == null && dest != null) {
+      Response response = http.get(Map.of(AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName, AirlineServlet.DEST_AIRPORT_PARAMETER, dest));
+      throwExceptionIfNotOkayHttpStatus(response);
+      String content = response.getContent();
+      TextParser parser = new TextParser(new StringReader(content));
+      return parser.parse();
+    } else if (src != null && dest == null) {
+      Response response = http.get(Map.of(AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName, AirlineServlet.SRC_AIRPORT_PARAMETER, src));
+      throwExceptionIfNotOkayHttpStatus(response);
+      String content = response.getContent();
+      TextParser parser = new TextParser(new StringReader(content));
+      return parser.parse();
+    } else {
+      Response response = http.get(Map.of(AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName, AirlineServlet.SRC_AIRPORT_PARAMETER, src, 
+        AirlineServlet.DEST_AIRPORT_PARAMETER, dest));
+      throwExceptionIfNotOkayHttpStatus(response);
+      String content = response.getContent();
+      TextParser parser = new TextParser(new StringReader(content));
+      return parser.parse();
+    }
+  }
+
   /**
    * Returns the definition for the given airlineName
    * 
