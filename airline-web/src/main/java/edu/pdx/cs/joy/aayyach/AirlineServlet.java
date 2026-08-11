@@ -148,7 +148,7 @@ public class AirlineServlet extends HttpServlet {
    *
    * The text of the error message is created by {@link Messages#missingRequiredParameter(String)}
    */
-  private void missingRequiredParameter( HttpServletResponse response, String parameterName )
+  protected void missingRequiredParameter( HttpServletResponse response, String parameterName )
       throws IOException
   {
       String message = Messages.missingRequiredParameter(parameterName);
@@ -160,7 +160,7 @@ public class AirlineServlet extends HttpServlet {
    *
    * The text of the message is formatted with {@link TextDumper}
    */
-  private void writeAirline(String airlineName, HttpServletResponse response) throws IOException {
+  protected void writeAirline(String airlineName, HttpServletResponse response) throws IOException {
     Airline airline = this.airlines.get(airlineName);
 
     if (airline == null) {
@@ -179,7 +179,7 @@ public class AirlineServlet extends HttpServlet {
   /**
    * Writes the filtered airline to the HTTP response
    */
-  private void writeFilteredAirline(String airlineName, String source, String dest, HttpServletResponse response) throws IOException {
+  protected void writeFilteredAirline(String airlineName, String source, String dest, HttpServletResponse response) throws IOException {
     Airline filtered = filter(airlineName, source, dest); 
     if (filtered == null) {
       response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -230,7 +230,7 @@ public class AirlineServlet extends HttpServlet {
    * @param dest the destination airport
    * @return the filtered airline object
    */
-  public Airline filter(String airlineName, String source, String dest) {
+  protected Airline filter(String airlineName, String source, String dest) {
     Airline airline = this.airlines.get(airlineName);
     if (airline == null) {
       return null;

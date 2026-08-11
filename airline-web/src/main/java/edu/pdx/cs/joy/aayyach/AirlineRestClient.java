@@ -51,7 +51,7 @@ public class AirlineRestClient
    * Returns airline and flight information in the form of an airline object
    */
   public Airline getAirlineAndFlight(String airlineName, String src, String dest) throws IOException, ParserException {
-    if (src == null || dest == null) {
+    if (src == null && dest == null) {
       Response response = http.get(Map.of(AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName));
       throwExceptionIfNotOkayHttpStatus(response);
       String content = response.getContent();
