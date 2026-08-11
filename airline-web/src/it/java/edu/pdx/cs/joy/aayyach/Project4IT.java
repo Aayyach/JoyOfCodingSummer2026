@@ -8,6 +8,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.io.OutputStreamWriter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -51,33 +52,32 @@ class Project4IT extends InvokeMainTestCase {
         assertThat(result.getTextWrittenToStandardError(), containsString("** Missing"));
     }
 
-    // Have to fix this test
-    // @Test
-    // void test4AddFlight() {
-    //     String airlineName = "\"AIRLINE NAME\"";
-    //     String flightNumber = "123";
-    //     String source = "PDX";
-    //     String departDate = "8/5/2026";
-    //     String departTime = "9:00";
-    //     String departExt =  "PM";
-    //     String dest = "OAK";
-    //     String arriveDate = "8/5/2026";
-    //     String arriveTime = "11:00";
-    //     String arriveExt = "PM";
+    @Test
+    void test4AddFlight() {
+        String airlineName = "AIRLINE NAME";
+        String flightNumber = "123";
+        String source = "PDX";
+        String departDate = "8/5/2026";
+        String departTime = "9:00";
+        String departExt =  "PM";
+        String dest = "OAK";
+        String arriveDate = "8/5/2026";
+        String arriveTime = "11:00";
+        String arriveExt = "PM";
+        PrettyPrinter pw = new PrettyPrinter(new OutputStreamWriter(System.out));
 
-    //     MainMethodResult result = invokeMain( Project4.class, HOSTNAME, PORT, airlineName, flightNumber, source, departDate, departTime, departExt, dest, arriveDate, arriveTime, arriveExt );
+        MainMethodResult result = invokeMain( Project4.class, "-host", "localhost", "-port", "8080", airlineName, flightNumber, source, departDate, departTime, departExt, dest, arriveDate, arriveTime, arriveExt );
 
-    //     assertThat(result.getTextWrittenToStandardError(), equalTo(""));
+        assertThat(result.getTextWrittenToStandardError(), equalTo(""));
 
-    //     String out = result.getTextWrittenToStandardOut();
-    //     assertThat(out, out, containsString(Messages.definedAirlineNameAs("AIRLINE NAME", flightNumber)));
+        String out = result.getTextWrittenToStandardOut();
+        assertThat(out, out, containsString(Messages.definedAirlineNameAs("AIRLINE NAME", flightNumber)));
 
-    //     result = invokeMain( Project4.class, HOSTNAME, PORT, airlineName, flightNumber, source, departDate, departTime, departExt, dest, arriveDate, arriveTime, arriveExt );
+        result = invokeMain( Project4.class, "-host", "localhost", "-port", "8080", airlineName, flightNumber, source, departDate, departTime, departExt, dest, arriveDate, arriveTime, arriveExt );
 
-    //     assertThat(result.getTextWrittenToStandardError(), equalTo(""));
+        assertThat(result.getTextWrittenToStandardError(), equalTo(""));
 
-    //     out = result.getTextWrittenToStandardOut();
-    //     // assertThat(out, out, containsString(PrettyPrinter.formatDictionaryEntry(airlineName, flightNumber)));
-    //     assertThat(out, containsString("Defined AIRLINE NAME as 123"));
-    // }
+        out = result.getTextWrittenToStandardOut();
+        assertThat(out, containsString("Defined AIRLINE NAME as 123"));
+    }
 }
