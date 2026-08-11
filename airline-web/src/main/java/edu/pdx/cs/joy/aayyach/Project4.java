@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * The main class that parses the command line and communicates with the
@@ -42,7 +43,16 @@ public class Project4 {
         boolean search = false; 
         
         HashMap<String, String> options = getOptions(args); 
-        if (options != null) {
+        ArrayList<String> commandArgs = getArgs(args);
+
+        if (commandArgs == null || commandArgs.isEmpty()) {
+            usage(MISSING_ARGS);
+            return;
+        } 
+
+        if (options == null) {
+            return; 
+        } else {
             for (Map.Entry<String, String> option : options.entrySet()) {
                 int i = 0;
                 if (option.getKey().equals("-README")) {
@@ -58,10 +68,15 @@ public class Project4 {
                     portExists = true;
                 } else if (option.getKey().equals("-search")) {
                     search = true;
-                    airlineName = option.getValue().replace("\"", "");
-                    if (i + 1 < args.length) { src = args[i + 1]; }
-                    if (i + 2 < args.length) { dest = args[i + 2]; }
-                    if (i + 3 < args.length) { error("-search only supports airline name, source, and destination argument."); return; }
+                    String [] parts = option.getValue().split(","); 
+                    int argLen = parts.length; 
+
+                    // Only airlineName is supplied
+                    if (i + 1 == argLen) { airlineName = parts[0].trim(); }
+                    // airlineName + source is supplied
+                    else if (i + 2 == argLen) { airlineName = parts[0].trim(); src = parts[1].trim(); }
+                    // airlineName + source + dest is supplied
+                    else if (i + 3 == argLen) { airlineName = parts[0].trim(); src = parts[1].trim(); dest = parts[2].trim(); }
                 }
                 ++i;
             }
@@ -71,73 +86,102 @@ public class Project4 {
             printREADMEFile();
             return;
         }
-  
-        int i = 0;
-        for (String arg : args) { 
-            if (search) { break; }
-            if (args[i].startsWith("-")) { continue; } 
-            if (i > 0 && i < args.length && args[i - 1].startsWith("-")) { continue; }
-            if (airlineName == null && arg.startsWith("\"") && arg.endsWith("\"")) {
-                airlineName = arg.replace("\"", "");
-            } else if (flightNumber == null && arg.length() == 3 && arg.matches("\\d{3}")) {
-                flightNumber = arg;
-            } else if (src == null && arg.length() == 3 && arg.matches("[a-zA-Z]{3}")) {
-                src = arg.toUpperCase();
-            } else if (departDate == null) {
-                departDate = arg;
-            } else if (departTime == null) {
-                departTime = arg;
-            } else if (departExt == null) {
-                departExt = arg.toUpperCase();
-            } else if (dest == null && arg.length() == 3 && arg.matches("[a-zA-Z]{3}")) {
-                dest = arg.toUpperCase();
-            } else if (arrivalDate == null) {
-                arrivalDate = arg;
-            } else if (arrivalTime == null) {
-                arrivalTime = arg;
-            } else if (arrivalExt == null) {
-                arrivalExt = arg.toUpperCase();
+        
+        if (!search) {
+            // Gets airline name
+            if (airlineName == null) {
+                airlineName = commandArgs.get(0);
+            }
+            // Gets flight number
+            if (flightNumber == null && commandArgs.get(1).length() == 3 && commandArgs.get(1).matches("\\d{3}") && !search) {
+                flightNumber = commandArgs.get(1);
             } else {
-                usage("Extraneous command line argument: " + arg);
+                error("Flight number must be 3 numerical characters"); 
+                return; 
+            }
+            // Gets source airport
+            if (src == null && commandArgs.get(2).length() == 3 && commandArgs.get(2).matches("[a-zA-Z]{3}")) {
+                src = commandArgs.get(2).toUpperCase();
+            } else {
+                error("Source airport must be 3 alphabetical characters");
                 return;
             }
-            ++i;
-        }
-
-        if (hostName == null) {
+            // Gets departure date 
+            if (departDate == null) {
+                departDate = commandArgs.get(3);
+            } 
+            // Gets departure time
+            if (departTime == null) {
+                    departTime = commandArgs.get(4);
+            }
+            // Gets departure extension (AM/PM)
+            if (departExt == null) {
+                departExt = commandArgs.get(5).toUpperCase();
+            } 
+            // Get the destination airport
+            if (dest == null && commandArgs.get(6).length() == 3 && commandArgs.get(6).matches("[a-zA-Z]{3}")) {
+                    dest = commandArgs.get(6).toUpperCase();
+            } else {
+                error("Destination airport must be 3 alphabetical characters");
+                return;
+            }
+            // Gets the arrival date
+            if (arrivalDate == null) {
+                arrivalDate = commandArgs.get(7); 
+            } 
+            // Gets the arrival time
+            if (arrivalTime == null) {
+                    arrivalTime = commandArgs.get(8); 
+            }
+            // Gets arrival extension (AM/PM)
+            if (arrivalExt == null) {
+                    arrivalExt = commandArgs.get(9).toUpperCase();
+            } 
+            // Checks for extra args 
+            if (commandArgs.size() > 19) {
+                usage("Extraneous command line arguments" );
+                return;
+            }
+        } 
+        
+        if ( hostName == null ) {
             usage( MISSING_ARGS );
             return;
-        }  else if (portString == null) {
+        }  else if ( portString == null ) {
             usage( MISSING_ARGS );
             return;
         } else if ( airlineName == null ) {
             error("Missing airline name (ex. \"Airline\")");
             return;
-        } else if ( src == null ) {
-            error( "Missing src airport" );
-            return;
-        } else if ( departDate == null ) {
-            error( "Missing depart date" );
-            return;
-        } else if ( departTime == null ) {
-            error( "Missing depart time" );
-            return;
-        } else if ( departExt == null ) {
-            error( "Missing depart extension (AM/PM)" );
-            return;
-        } else if ( dest == null ) {
-            error( "Missing destination airport" );
-            return;
-        } else if ( arrivalDate == null ) {
-            error( "Missing arrival date" );
-            return;
-        } else if ( arrivalTime == null ) {
-            error( "Missing arrival time" );
-            return;
-        } else if ( arrivalExt == null ) {
-            error( "Missing arrival extension (AM/PM)");
-            return;
-        }
+        } 
+        
+        if (!search) {
+            if ( src == null ) {
+                error( "Missing src airport" );
+                return;
+            } else if ( departDate == null ) {
+                error( "Missing depart date" );
+                return;
+            } else if ( departTime == null ) {
+                error( "Missing depart time" );
+                return;
+            } else if ( departExt == null ) {
+                error( "Missing depart extension (AM/PM)" );
+                return;
+            } else if ( dest == null ) {
+                error( "Missing destination airport" );
+                return;
+            } else if ( arrivalDate == null ) {
+                error( "Missing arrival date" );
+                return;
+            } else if ( arrivalTime == null ) {
+                error( "Missing arrival time" );
+                return;
+            } else if ( arrivalExt == null ) {
+                error( "Missing arrival extension (AM/PM)");
+                return;
+            }
+        } 
 
         int port;
         try {
@@ -149,38 +193,49 @@ public class Project4 {
 
         AirlineRestClient client = new AirlineRestClient(hostName, port);
 
+        Airline returned = null;
         String message;
         String depart = departDate + " " + departTime + " " + departExt;
         String arrive = arrivalDate + " " + arrivalTime + " " + arrivalExt;
         try {
-            if (flightNumber == null) {
-                // Print all dictionary entries
-                Airline airline = client.getAirline(airlineName); 
-
-                StringWriter sw = new StringWriter(); 
-                PrettyPrinter pretty = new PrettyPrinter(sw); 
-                pretty.dump(airline);
-                message = sw.toString(); 
-            } else {
-                // Post the airlineName/flightNumber pair
+            if (!search) {
                 client.addFlight(airlineName, flightNumber, src, depart, dest, arrive);
+                message = Messages.definedAirlineNameAs(airlineName, flightNumber);
+            } else {
+                if (src == null) { src = "NONE"; }
+                if (dest == null) { dest = "NONE"; }
+                try {
+                    returned = client.searchForAirlines(airlineName, src, dest);
+                } catch (RuntimeException e) {
+                    System.out.println("There was no airline found with the name: " + airlineName);
+                    return;
+                }
+                PrettyPrinter pretty = new PrettyPrinter(new OutputStreamWriter(System.out));
+                pretty.dump(returned);
                 message = Messages.definedAirlineNameAs(airlineName, flightNumber);
             }
 
             if (print) {
-                Airline returned = client.getAirlineAndFlight(airlineName, src, dest);
+                returned = client.getAirlineAndFlight(airlineName, src, dest);
                 PrettyPrinter pretty = new PrettyPrinter(new OutputStreamWriter(System.out));
                 pretty.dump(returned);
             }
-
         } catch (IOException | ParserException ex ) {
             error("While contacting server: " + ex.getMessage());
             return;
         }
 
-        System.out.println(message);
+        if (message.equals(airlineName + " with 0 flights")) {
+            System.out.println(airlineName + " airline does not have any flights from " + src + "to " + dest);
+            return;
+        } else {
+            System.out.println(message);
+        }
     }
 
+    /**
+     * Prints out an error message to stderr
+     */
     private static void error( String message )
     {
         PrintStream err = System.err;
@@ -189,9 +244,10 @@ public class Project4 {
 
     /**
      * Prints usage information for this program and exits
+     * 
      * @param message An error message to print
      */
-    private static void usage( String message )
+    private static void usage(String message)
     {
         PrintStream err = System.err;
         err.println("** " + message);
@@ -211,8 +267,8 @@ public class Project4 {
     }
 
     /**
-    * Prints the README.txt file
-    */
+     * Prints the README.txt file
+     */
     public static void printREADMEFile() {
         try(InputStream readMe = Project4.class.getResourceAsStream("README.txt")) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(readMe));
@@ -226,26 +282,66 @@ public class Project4 {
         }
     }
 
-    public static HashMap<String, String> getOptions(String[] args) {
+    /**
+     * Gets the arguments from the command line arguments
+     * 
+     * @param args the command line argument array
+     * @return array containing the arguments
+     */
+    public static ArrayList<String> getArgs(String [] args) {
+        HashMap<String, String> options = getOptions(args);
+        if (options == null) { return null; }
+        ArrayList<String> argArray = new ArrayList<String>();
+        int len = args.length;
+
+        for (int i = 0; i < len; ++i) {
+            if (args[i].startsWith("-")) {
+                if (args[i].equals("-README") || args[i].equals("-print")) { continue; }
+                if (args[i].equals("-host") || args[i].equals("-port")) { ++i; continue; }
+                if (args[i].equals("-search")) {
+                    if (options.containsKey("-search")) {
+                        String temp = options.get("-search");
+                        String [] temp2 = temp.split(",");
+                        int j = temp2.length;
+                        i += j;
+                    }
+                }
+            } 
+            argArray.add(args[i]); 
+        }
+        return argArray; 
+    }
+
+    /**
+     * Gets the options from the command line arguments
+     * 
+     * @param args the command line argument array
+     * @return hashmap containing the options
+     */
+    public static HashMap<String, String> getOptions(String [] args) {
         HashMap<String, String> options = new HashMap<>();
         int len = args.length;
 
         // Keep looping until i < length of args and we aren't at the airline name
-        for (int i = 0; i < len && !args[i].startsWith("\""); ++i) {
+        for (int i = 0; i < len; ++i) {
             switch(args[i]) {
                 case "-host":
+                    // Checks if -host is followed by the hostname
                     if (i + 1 >= len) {
                         error("-host must be followed by the hostname (ex. -host localhost)");
                         return null; 
                     }
                     options.put("-host", args[i + 1]); 
+                    ++i;
                     break;
                 case "-port":
+                    // Checks if -port is followed by the port string
                     if (i + 1 >= len) {
                         error("-port must be followed by the port (ex. -port 8080)");
                         return null;
                     }
                     options.put("-port", args[i + 1]); 
+                    ++i;
                     break;
                 case "-README":
                     options.put("-README", null);
@@ -254,13 +350,44 @@ public class Project4 {
                     options.put("-print", null);
                     break;
                 case "-search":
+                    // Checks if the airline name is supplied
                     if (i + 1 >= len) {
                         error("-search must be followed by the airline name (ex. -search \"Airline\")");
                         return null;
-                    } 
+                    }
+                    // There's a src and dest specified 
+                    else if ((i + 3 < len) && !args[i + 2].startsWith("-") && !args[i + 3].startsWith("-")) {
+                        if ((args[i + 2].length() != 3) || (!args[i + 2].matches("^[a-zA-Z]+$"))) {
+                            error("Source airport must be three letters alphabetical characters in length");
+                            return null;
+                        }
+                        if ((args[i + 3].length() != 3) || (!args[i + 3].matches("^[a-zA-Z]+$"))) {
+                            error("Destination airport must be three letters alphabetical characters in length");
+                            return null;
+                        }
+                        options.put("-search", args[i + 1] + "," + args[i + 2] + "," + args[i + 3]);
+                        i += 3;
+                        break;
+                    }
+                    // There's a src specified 
+                    else if ((i + 2 < len) && !args[i + 2].startsWith("-")) {
+                        if ((args[i + 2].length() != 3) || (!args[i + 2].matches("^[a-zA-Z]+$"))) {
+                            error("Source airport must be three letters alphabetical characters in length");
+                            return null;
+                        }
+                        options.put("-search", args[i + 1] + "," + args[i + 2]);
+                        i += 2;
+                        break;
+                    }
                     options.put("-search", args[i + 1]);
+                    ++i;
                     break;
                 default:
+                    // Bogus option
+                    if (args[i].startsWith("-")) {
+                        error("Not recognized as a valid option: " + args[i]);
+                        return null; 
+                    }  
                     break;
             }
         }

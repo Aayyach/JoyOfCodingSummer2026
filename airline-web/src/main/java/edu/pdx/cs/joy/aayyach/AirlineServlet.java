@@ -209,6 +209,9 @@ public class AirlineServlet extends HttpServlet {
     }
   }
 
+  /**
+   * Returns the airline from the airlineName
+   */
   @VisibleForTesting
   Airline getAirline(String airlineName) {
       return this.airlines.get(airlineName);

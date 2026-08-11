@@ -47,6 +47,9 @@ public class AirlineRestClient
       this.http = http;
     }
 
+  /**
+   * Returns airline and flight information in the form of an airline object
+   */
   public Airline getAirlineAndFlight(String airlineName, String src, String dest) throws IOException, ParserException {
     if (src == null || dest == null) {
       Response response = http.get(Map.of(AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName));
@@ -132,6 +135,28 @@ public class AirlineRestClient
     Response response = http.delete(Map.of());
     throwExceptionIfNotOkayHttpStatus(response);
   }
+
+  /**
+   * SEARCH request to search for an airline with an optional specified SRC and DEST airport
+   * 
+   * @throws IOException throws an IOException if HTTP status is not 200
+   * @throws ParserException throws a ParserException if TextParser encounters an error
+   */
+    public Airline searchForAirlines(String airlineName, String src, String dest) throws IOException, ParserException {
+      Response response; 
+      if (src.equals("NONE") && dest.equals("NONE")) {
+        response = http.get(Map.of(AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName));
+      } else {
+        response = http.get(Map.of(
+            AirlineServlet.AIRLINE_NAME_PARAMETER, airlineName,
+            AirlineServlet.SRC_AIRPORT_PARAMETER, src,
+            AirlineServlet.DEST_AIRPORT_PARAMETER, dest));
+      }
+      throwExceptionIfNotOkayHttpStatus(response);
+      String content = response.getContent();
+      TextParser parser = new TextParser(new StringReader(content));
+      return parser.parse();
+    }
 
   /**
    * Throws an exception if HTTP status is not 200

@@ -8,13 +8,26 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Collection;
 
+/**
+ * Implementation of the <code>TextDumper</code> class for Project 4.
+ */
 public class TextDumper {
   private final Writer writer;
 
+  /**
+   * Initalizes the writer field 
+   * 
+   * @param writer  The buffer that is being written to
+   */
   public TextDumper(Writer writer) {
     this.writer = writer;
   }
 
+  /**
+   * Dumps an airline to stdout
+   *
+   * @param airline The airline being written to stdout
+   */
   public void dump(Airline airline) {
     Collection<Flight> airlineFlights = airline.getFlights();
     try (PrintWriter pw = new PrintWriter(this.writer)) {

@@ -13,13 +13,26 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Implementation of the <code>TextParser</code> class for Project 4.
+ */
 public class TextParser {
   private final Reader reader;
 
+  /**
+   * Initalizes the reader field 
+   * 
+   * @param reader  The buffer that is being read
+   */
   public TextParser(Reader reader) {
     this.reader = reader;
   }
 
+  /**
+   * Parses a buffer to see if an airline and flight(s) exist
+   * 
+   * @return Airline object from parsed buffer
+   */
   public Airline parse() throws ParserException {
     try (BufferedReader br = new BufferedReader(this.reader)) {
       Airline airline = null;

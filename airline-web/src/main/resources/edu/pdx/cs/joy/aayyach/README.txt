@@ -15,7 +15,7 @@ your code.
 
 Even while understanding the concepts, writing the code felt challenging for me since 
 this is the first course I've taken where I've had the opportunity to write code for a client and
-server to interact with each other. Nonetheless, I think that this is a really good learning
+server to interact with each other. Nonetheless, I think that this was a very good learning
 opportunity since we were able to refactor an existing codebase, which was the plain dictionary
 style code, into code that supports airlines and flights. I'll defintely need more practice with
 these concepts, especially in Java, but I had a lot of fun writing the code for this assignment 

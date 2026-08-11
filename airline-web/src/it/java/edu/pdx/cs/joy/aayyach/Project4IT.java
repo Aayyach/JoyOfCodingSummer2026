@@ -40,14 +40,14 @@ class Project4IT extends InvokeMainTestCase {
     void test2MissingAirlineName() {
         MainMethodResult result = invokeMain( Project4.class, "-host", HOSTNAME, "-port", PORT);
 
-        assertThat(result.getTextWrittenToStandardError(), containsString("Missing airline name"));
+        assertThat(result.getTextWrittenToStandardError(), containsString("** Missing command line arguments"));
     }
 
     @Test
     void test3NonExistentSourceAirlinePrintsErrorMessage() {
         String airlineName = "\"AIRLINE NAME\"";
         String flightNumber = "123";
-        MainMethodResult result = invokeMain(Project4.class, airlineName, flightNumber, "11/4/2025", "10:00", "PM", "OAK", "11/5/2025", "12:00", "AM");
+        MainMethodResult result = invokeMain(Project4.class, airlineName, flightNumber, "PDX", "11/4/2025", "10:00", "PM", "OAK", "11/5/2025", "12:00", "PM");
         assertThat(result.getTextWrittenToStandardError(), containsString("** Missing"));
     }
 
