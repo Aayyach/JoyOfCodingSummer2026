@@ -55,7 +55,7 @@ void checkNameWithValidInputReturnsTrue() {
  */
  @Test 
  void getFlightsReturnsFlightsCollectionAfterAddingFlight() {
-    Airline test = new Airline("Test");
+   Airline test = new Airline("Test");
    LocalDateTime source = LocalDateTime.of(2026, 7, 29, 8, 0);
    LocalDateTime dest = LocalDateTime.of(2026, 7, 29, 10, 0);
 

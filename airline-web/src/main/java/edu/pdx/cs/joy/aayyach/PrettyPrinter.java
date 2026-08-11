@@ -16,14 +16,14 @@ public class PrettyPrinter {
   @VisibleForTesting
   static String formatWordCount(int count )
   {
-    return String.format( "Dictionary on server contains %d words", count );
+    return String.format( "Airline on server contains %d words", count );
   }
 
   /**
    * Formats passed in arguments
    */
   @VisibleForTesting
-  static String formatDictionaryEntry(String word, String definition )
+  static String formatAirlineEntry(String word, String definition )
   {
     return String.format("  %s -> %s", word, definition);
   }
