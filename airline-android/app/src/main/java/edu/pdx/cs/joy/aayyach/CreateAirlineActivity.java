@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +79,7 @@ public class CreateAirlineActivity extends AppCompatActivity {
     }
 
     private File getAirlinesFile() {
-        File dataDir = this.getDataDir();
+        File dataDir = this.getFilesDir();
         return new File(dataDir, "airlines_" + this.airline.getName() + ".txt");
     }
 
@@ -99,9 +100,9 @@ public class CreateAirlineActivity extends AppCompatActivity {
         if (airlineFiles == null) { return; }
 
         for (String file : airlineFiles) {
-            if (file.startsWith("airline_") && file.endsWith(".txt")) {
-                try (FileReader fr = new FileReader(file)) {
-                    TextParser parser = new TextParser(fr);
+            if (file.startsWith("airlines_") && file.endsWith(".txt")) {
+                try (InputStreamReader isr = new InputStreamReader(openFileInput(file))) {
+                    TextParser parser = new TextParser(isr);
                     Airline readAirline = parser.parse();
                     if (readAirline != null) { airlines.add(readAirline); }
                 } catch (ParserException | IOException e) {

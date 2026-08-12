@@ -12,4 +12,10 @@
     <string name="create_airline">Create Airline</string>
     <string name="enter_flight_number">Enter flight number</string>
     <string name="create_flight">Create Flight</string>
+    <string name="choose_airline_to_add_flight_to">Choose airline to add flight to</string>
+    <string name="enter_dest_date_and_time">Enter dest date and time</string>
+    <string name="enter_dest_airport_ex_oak">Enter dest airport (ex. OAK)</string>
+    <string name="enter_source_date_and_time">Enter source date and time</string>
+    <string name="enter_source_airport_ex_pdx">Enter source airport (ex. PDX)</string>
+    <string name="enter_flight_number2">Enter flight number</string>
 </resources>

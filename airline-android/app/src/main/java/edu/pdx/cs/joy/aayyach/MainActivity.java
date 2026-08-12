@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import edu.pdx.cs.joy.ParserException;
@@ -64,10 +65,9 @@ public class MainActivity extends AppCompatActivity {
         if (airlineFiles == null) { return; }
 
         for (String file : airlineFiles) {
-            if (file.startsWith("airline_") && file.endsWith(".txt")) {
-                try (FileReader fr = new FileReader(file)) {
-//                    TextParser parser = new TextParser(new FileReader("airlines.txt"));
-                    TextParser parser = new TextParser(fr);
+            if (file.startsWith("airlines_") && file.endsWith(".txt")) {
+                try (InputStreamReader isr = new InputStreamReader(openFileInput(file))) {
+                    TextParser parser = new TextParser(isr);
 
                     Airline readAirline = parser.parse();
                     if (readAirline != null) { airlines.put(readAirline.getName(), readAirline); }

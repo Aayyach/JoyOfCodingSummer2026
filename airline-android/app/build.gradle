@@ -35,6 +35,7 @@ dependencies {
     implementation libs.activity.ktx
     implementation libs.appcompat
     implementation libs.constraintlayout
+    implementation libs.core.i18n
     implementation libs.material
     implementation 'io.github.davidwhitlock.joy:projects:3.0.5'
     testImplementation libs.junit

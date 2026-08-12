@@ -7,27 +7,108 @@
     android:layout_height="match_parent"
     tools:context=".CreateFlightActivity">
 
-    <Button
-        android:id="@+id/button12"
+    <EditText
+        android:id="@+id/flightNumber"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginBottom="15dp"
+        android:ems="10"
+        android:hint="@string/enter_flight_number2"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/src"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner2"
+        tools:ignore="LabelFor" />
+
+    <EditText
+        android:id="@+id/destDateTime"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginStart="49dp"
-        android:layout_marginEnd="49dp"
-        android:layout_marginBottom="13dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginBottom="26dp"
+        android:ems="10"
+        android:hint="@string/enter_dest_date_and_time"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/button12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dest"
+        tools:ignore="LabelFor" />
+
+    <EditText
+        android:id="@+id/srcDateTime"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginBottom="15dp"
+        android:ems="10"
+        android:hint="@string/enter_source_date_and_time"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/dest"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/src"
+        tools:ignore="LabelFor" />
+
+    <EditText
+        android:id="@+id/dest"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginBottom="17dp"
+        android:ems="10"
+        android:hint="@string/enter_dest_airport_ex_oak"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/destDateTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/srcDateTime"
+        tools:ignore="LabelFor" />
+
+    <EditText
+        android:id="@+id/src"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginBottom="17dp"
+        android:ems="10"
+        android:hint="@string/enter_source_airport_ex_pdx"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/srcDateTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flightNumber"
+        tools:ignore="LabelFor" />
+
+    <Button
+        android:id="@+id/button12"
+        android:layout_width="325dp"
+        android:layout_height="74dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginEnd="47dp"
+        android:layout_marginBottom="116dp"
         android:backgroundTint="#003B6F"
         android:text="@string/create_flight"
+        android:onClick="createFlight"
         app:layout_constraintBottom_toTopOf="@+id/button13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/destDateTime" />
 
     <Button
         android:id="@+id/button13"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="320dp"
+        android:layout_height="79dp"
         android:layout_marginStart="49dp"
         android:layout_marginEnd="49dp"
-        android:layout_marginBottom="77dp"
+        android:layout_marginBottom="76dp"
         android:backgroundTint="#003B6F"
         android:onClick="backToHome"
         android:text="@string/back_to_home"
@@ -37,15 +118,15 @@
         app:layout_constraintTop_toBottomOf="@+id/button12" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spinner2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="14dp"
+        android:layout_marginStart="11dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginBottom="665dp"
-        android:tooltipText="Choose airline to add flight to"
-        app:layout_constraintBottom_toTopOf="@+id/button12"
+        android:layout_marginEnd="11dp"
+        android:layout_marginBottom="20dp"
+        android:tooltipText="@string/choose_airline_to_add_flight_to"
+        app:layout_constraintBottom_toTopOf="@+id/flightNumber"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
