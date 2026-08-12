@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
- * Implementation of the <code>TextParser</code> class for Project 4.
+ * Implementation of the <code>TextParser</code> class for Project 5.
  */
 public class TextParser {
   private final Reader reader;

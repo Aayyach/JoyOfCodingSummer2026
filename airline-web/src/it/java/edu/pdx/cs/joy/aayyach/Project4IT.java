@@ -25,18 +25,27 @@ class Project4IT extends InvokeMainTestCase {
     private static final String HOSTNAME = "localhost";
     private static final String PORT = System.getProperty("http.port", "8080");
 
+    /**
+     * Integration test to check that all airlines are removed properly
+     */
     @Test
     void test0RemoveAllMappings() throws IOException {
       AirlineRestClient client = new AirlineRestClient(HOSTNAME, Integer.parseInt(PORT));
       client.removeAllAirlines();
     }
 
+    /**
+     * Integration test to check that no command line args displays an error message to stderr
+     */
     @Test
     void test1NoCommandLineArguments() {
         MainMethodResult result = invokeMain( Project4.class );
         assertThat(result.getTextWrittenToStandardError(), containsString(Project4.MISSING_ARGS));
     }
 
+    /**
+     * Integration test to check that a missing airline name arg displays an error message to stderr
+     */
     @Test
     void test2MissingAirlineName() {
         MainMethodResult result = invokeMain( Project4.class, "-host", HOSTNAME, "-port", PORT);
@@ -44,6 +53,9 @@ class Project4IT extends InvokeMainTestCase {
         assertThat(result.getTextWrittenToStandardError(), containsString("** Missing command line arguments"));
     }
 
+    /**
+     * Integration test to check that a nonexistent source airline arg displays an error message to stderr
+     */
     @Test
     void test3NonExistentSourceAirlinePrintsErrorMessage() {
         String airlineName = "\"AIRLINE NAME\"";
@@ -52,6 +64,9 @@ class Project4IT extends InvokeMainTestCase {
         assertThat(result.getTextWrittenToStandardError(), containsString("** Missing"));
     }
 
+    /**
+     * Integration test to check that an airline is added properly if all args are provided corretly to the command line
+     */
     @Test
     void test4AddFlight() {
         String airlineName = "AIRLINE NAME";

@@ -28,12 +28,18 @@ class AirlineRestClientIT {
     return new AirlineRestClient(HOSTNAME, port);
   }
 
+  /**
+   * Integration test that checks that removeAllAirlines method works properly
+   */
   @Test
   void test0RemoveAllAirlines() throws IOException {
     AirlineRestClient client = newAirlineRestClient();
     client.removeAllAirlines();
   }
 
+  /**
+   * Integration test that checks that addFlight properly adds a flight
+   */
   @Test
   void test2AddFlight() throws IOException, ParserException {
     AirlineRestClient client = newAirlineRestClient();
@@ -52,8 +58,11 @@ class AirlineRestClientIT {
     assertThat(airline.getFlights().iterator().next().getNumber(), equalTo(Integer.parseInt(flightNumber)));
   }
 
+  /**
+   * Integration test that checks that an empty airline name throws an exception
+   */
   @Test
-  void test4EmptyAirlineNameThrowsException() {
+  void test3EmptyAirlineNameThrowsException() {
     AirlineRestClient client = newAirlineRestClient();
     String emptyString = "";
 

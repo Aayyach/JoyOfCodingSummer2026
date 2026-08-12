@@ -28,7 +28,6 @@ public class PrettyPrinter {
     return String.format("  %s -> %s", word, definition);
   }
 
-
   /**
    * Initalizes the writer field 
    * 

@@ -9,7 +9,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Collection;
 
 /**
- * Implementation of the <code>TextDumper</code> class for Project 4.
+ * Implementation of the <code>TextDumper</code> class for Project 5.
  */
 public class TextDumper {
   private final Writer writer;

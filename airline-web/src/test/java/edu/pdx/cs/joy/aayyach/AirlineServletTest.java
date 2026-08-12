@@ -215,7 +215,7 @@ class AirlineServletTest {
     assertThat(statusCode.getValue(), equalTo(HttpServletResponse.SC_NOT_FOUND));
   }
 
-    /**
+  /**
    * Unit test to check that the writeFilteredAirline method is working correctly
    */
   @Test

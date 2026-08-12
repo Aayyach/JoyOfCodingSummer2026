@@ -13,8 +13,14 @@ import java.time.format.DateTimeFormatter;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+/**
+ * Unit tests for the TextDumper and TextParser classes
+ */
 public class TextDumperParserTest {
 
+  /**
+   * Checks that the dump and parse methods are working properly
+   */
   private Airline dumpAndParse(Airline airline) throws ParserException {
     StringWriter sw = new StringWriter();
     TextDumper dumper = new TextDumper(sw);
@@ -26,6 +32,9 @@ public class TextDumperParserTest {
     return parser.parse();
   }
 
+  /**
+   * Checks that dumped text can be parsed
+   */
   @Test
   void dumpedTextCanBeParsed() throws ParserException {
     String airlineName = "Airline";
