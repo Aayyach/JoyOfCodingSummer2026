@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">airline-android</string>
     <string name="airline_manager">Airline Manager</string>
+    <string name="search_for_flight">Search for Flight</string>
+    <string name="save_an_airline_s_info">Save an Airline\'s Info</string>
+    <string name="help">Help</string>
+    <string name="display_an_airline_s_info">Display an Airline\'s Info</string>
+    <string name="create_an_airline">Create an Airline</string>
+    <string name="enter_airline_name">Enter airline name</string>
 </resources>
