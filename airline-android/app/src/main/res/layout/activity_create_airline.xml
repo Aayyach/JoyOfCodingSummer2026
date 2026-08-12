@@ -8,39 +8,66 @@
     tools:context=".CreateAirlineActivity">
 
     <EditText
-        android:id="@+id/editTextText"
-        android:layout_width="252dp"
+        android:id="@+id/airlineName"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="275dp"
-        android:layout_marginBottom="23dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginTop="233dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginBottom="16dp"
+        android:autofillHints="Enter airline name"
         android:ems="10"
+        android:hint="@string/enter_airline_name"
         android:inputType="text"
-        android:text="@string/enter_airline_name"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor" />
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="249dp"
+        android:id="@+id/button2"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="17dp"
-        android:text="Create Flight"
-        app:layout_constraintBottom_toTopOf="@+id/button10"
+        android:layout_marginStart="49dp"
+        android:layout_marginEnd="49dp"
+        android:layout_marginBottom="111dp"
+        android:backgroundTint="#003B6F"
+        android:onClick="createAirline"
+        android:text="@string/create_airline"
+        app:layout_constraintBottom_toTopOf="@+id/button3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+        app:layout_constraintTop_toBottomOf="@+id/airlineName" />
 
     <Button
-        android:id="@+id/button10"
-        android:layout_width="249dp"
+        android:id="@+id/button3"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="261dp"
-        android:text="Back to Home"
+        android:layout_marginStart="49dp"
+        android:layout_marginEnd="49dp"
+        android:layout_marginBottom="15dp"
+        android:backgroundTint="#003B6F"
+        android:text="@string/create_a_flight"
+        android:onClick="openFlightScreen"
+        app:layout_constraintBottom_toTopOf="@+id/button5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="49dp"
+        android:layout_marginEnd="49dp"
+        android:layout_marginBottom="167dp"
+        android:backgroundTint="#003B6F"
+        android:onClick="backToHome"
+        android:text="@string/back_to_home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintTop_toBottomOf="@+id/button3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

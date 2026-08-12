@@ -7,4 +7,9 @@
     <string name="display_an_airline_s_info">Display an Airline\'s Info</string>
     <string name="create_an_airline">Create an Airline</string>
     <string name="enter_airline_name">Enter airline name</string>
+    <string name="back_to_home">Back To Home</string>
+    <string name="create_a_flight">Create A Flight</string>
+    <string name="create_airline">Create Airline</string>
+    <string name="enter_flight_number">Enter flight number</string>
+    <string name="create_flight">Create Flight</string>
 </resources>
