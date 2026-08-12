@@ -43,6 +43,16 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, CREATE_AIRLINE_REQUEST);
     }
 
+    public void openDisplayAirlineInfoScreen(View view) {
+        Intent intent = new Intent(this, DisplayAirlineActivity.class);
+        startActivity(intent);
+    }
+
+    public void openHelpMenuScreen(View view) {
+        Intent intent = new Intent(this, HelpMenuActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -18,4 +18,5 @@
     <string name="enter_source_date_and_time">Enter source date and time</string>
     <string name="enter_source_airport_ex_pdx">Enter source airport (ex. PDX)</string>
     <string name="enter_flight_number2">Enter flight number</string>
+    <string name="back_to_home2">Back to Home</string>
 </resources>
