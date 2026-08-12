@@ -5,6 +5,48 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DisplayAirlineActivity">
+    tools:context=".HelpMenuActivity">
 
+    <Spinner
+        android:id="@+id/airlines"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:tooltipText="@string/choose_airline_to_add_flight_to"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:paddingBottom="10dp"
+            android:lineSpacingExtra="4dp"
+            android:textSize="20sp"
+            android:text="TextView" />
+
+        <Button
+            android:id="@+id/button8"
+            android:layout_width="350dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="0dp"
+            android:backgroundTint="#003B6F"
+            android:onClick="backToHome"
+            android:text="@string/back_to_home2"
+            tools:ignore="VisualLintButtonSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
