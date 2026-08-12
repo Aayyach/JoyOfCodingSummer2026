@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">airline-android</string>
+    <string name="airline_manager">Airline Manager</string>
+</resources>
