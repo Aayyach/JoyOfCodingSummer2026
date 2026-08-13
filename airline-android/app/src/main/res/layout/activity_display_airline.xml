@@ -17,36 +17,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="350dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="#003B6F"
+        android:onClick="backToHome"
+        android:text="@string/back_to_home2"
+        tools:ignore="VisualLintButtonSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/button8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/airlines">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:paddingBottom="10dp"
             android:lineSpacingExtra="4dp"
-            android:textSize="20sp"
-            android:text="TextView" />
-
-        <Button
-            android:id="@+id/button8"
-            android:layout_width="350dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="0dp"
-            android:backgroundTint="#003B6F"
-            android:onClick="backToHome"
-            android:text="@string/back_to_home2"
-            tools:ignore="VisualLintButtonSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:padding="20dp"
+            android:paddingStart="10dp"
+            android:paddingBottom="10dp"
+            android:text="TextView"
+            android:textSize="20sp" />
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

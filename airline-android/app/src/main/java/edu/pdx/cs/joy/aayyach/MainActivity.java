@@ -53,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openDisplaySpecificAirlineScreen(View view) {
+        Intent intent = new Intent(this, DisplaySpecificAirlineActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -87,4 +92,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }

@@ -60,6 +60,7 @@
         android:layout_marginEnd="49dp"
         android:layout_marginBottom="26dp"
         android:text="@string/search_for_flight"
+        android:onClick="openDisplaySpecificAirlineScreen"
         android:backgroundTint="#003B6F"
         app:layout_constraintBottom_toTopOf="@+id/button9"
         app:layout_constraintEnd_toEndOf="parent"

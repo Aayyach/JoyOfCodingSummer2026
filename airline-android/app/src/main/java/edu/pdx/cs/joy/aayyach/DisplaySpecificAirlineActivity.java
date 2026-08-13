@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,11 +18,12 @@ import androidx.core.view.WindowInsetsCompat;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import edu.pdx.cs.joy.ParserException;
 
-public class DisplayAirlineActivity extends AppCompatActivity {
+public class DisplaySpecificAirlineActivity extends AppCompatActivity {
 
     private final List<Airline> airlines = new ArrayList<>();
     protected TextView airlineInfo;
@@ -31,7 +33,7 @@ public class DisplayAirlineActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_display_airline);
+        setContentView(R.layout.activity_display_specific_airline);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -41,16 +43,6 @@ public class DisplayAirlineActivity extends AppCompatActivity {
         airlineInfo = findViewById(R.id.textView3);
         loadAirlineData();
         displayAirlineOptions();
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                displayContent();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
     }
 
     public void backToHome(View view) {
@@ -88,19 +80,46 @@ public class DisplayAirlineActivity extends AppCompatActivity {
         }
     }
 
-    public void displayContent() {
+    public void filter(View view) {
         if (spinner.getSelectedItem() == null) {
+            return;
+        }
+        EditText srcInput = findViewById(R.id.srcSearch);
+        String src = srcInput.getText().toString();
+        if (!src.matches("[a-zA-Z]{3}") || src.isEmpty()) {
+            Toast.makeText(this, "Source airport must not be empty and must be 3 alphabetical chars", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        EditText destInput = findViewById(R.id.destSearch);
+        String dest = destInput.getText().toString();
+        if (!dest.matches("[a-zA-Z]{3}") || dest.isEmpty()) {
+            Toast.makeText(this, "Destination airport must not be empty and must be 3 alphabetical chars", Toast.LENGTH_LONG).show();
             return;
         }
 
         String selected = spinner.getSelectedItem().toString();
+        Airline rightAirline = null;
         for (Airline airline : airlines) {
             if (airline.getName().equals(selected)) {
-                PrettyPrinter pw = new PrettyPrinter(airlineInfo);
-                pw.dump(airline);
+                rightAirline = airline;
                 break;
             }
         }
-    }
 
+        if (rightAirline == null) {
+            return;
+        }
+
+        Airline filtered = new Airline(rightAirline.getName());
+        Collection<Flight> flights = rightAirline.getFlights();
+        for (Flight flight : flights) {
+            if (flight.getSource().equalsIgnoreCase(src) && flight.getDestination().equalsIgnoreCase(dest)) {
+                filtered.addFlight(flight);
+            }
+        }
+
+        PrettyPrinter pw = new PrettyPrinter(findViewById(R.id.textView3));
+        pw.dump(filtered);
+    }
 }
