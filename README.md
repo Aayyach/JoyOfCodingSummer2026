@@ -1,7 +1,8 @@
 # Airline Management Application
 A multi-phase Java and Android application designed over the course of five projects in the course "Joy of Coding Java and Android" at Portland State University to manage airlines, flights, and flight searches. This project evolves from a CLI application with data persistence into a full-fledged Android mobile application.
 
-![App Demo](docs/Screen_recording_20260826_232216.gif)
+## Mobile App Demo
+<img src="/docs/Screen_recording_20260826_232216.gif" width="25%" />
 
 ## Overview
 The system manages flight scheduling, airport codes, date-time formatting, and data persistence. It validates user input, handles error conditions smoothly, and provides three distinct user interfaces: CLI, REST Web Service, and Android UI.
